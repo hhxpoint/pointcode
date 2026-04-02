@@ -59,13 +59,13 @@ const LANGUAGE_NAME_TO_CODE: Record<string, string> = {
   korean: 'ko',
   한국�? 'ko',
   hindi: 'hi',
-  हिन्दी: 'hi',
+  हिनढ़दी: 'hi',
   हिंदी: 'hi',
   indonesian: 'id',
   'bahasa indonesia': 'id',
   bahasa: 'id',
   russian: 'ru',
-  русский: 'ru',
+  руѝѝкий: 'ru',
   polish: 'pl',
   polski: 'pl',
   turkish: 'tr',
@@ -74,11 +74,11 @@ const LANGUAGE_NAME_TO_CODE: Record<string, string> = {
   dutch: 'nl',
   nederlands: 'nl',
   ukrainian: 'uk',
-  українська: 'uk',
+  українѝька: 'uk',
   greek: 'el',
   ελληνικά: 'el',
   czech: 'cs',
-  čeština: 'cs',
+  ĝeština: 'cs',
   cestina: 'cs',
   danish: 'da',
   dansk: 'da',
@@ -985,7 +985,7 @@ export function useVoice({
             '[voice] Failed to connect to voice_stream (no OAuth token?)',
           )
           onErrorRef.current?.(
-            'Voice mode requires a Point account. Please run /login to sign in.',
+            'Voice mode is unavailable until API key is configured. Please run /model key <api_key>.',
           )
           // Clear the audio buffer on failure
           audioBuffer.length = 0

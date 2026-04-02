@@ -243,7 +243,7 @@ export const ConfigTool = buildTool({
           data: {
             success: false,
             error: !isAnthropicAuthEnabled()
-              ? 'Voice mode requires a Point account. Please run /login to sign in.'
+              ? 'Voice mode is unavailable until API key is configured. Please run /model key <api_key>.'
               : 'Voice mode is not available.',
           },
         }
@@ -273,7 +273,7 @@ export const ConfigTool = buildTool({
           data: {
             success: false,
             error:
-              'Voice mode requires a Point account. Please run /login to sign in.',
+              'Voice mode is unavailable until API key is configured. Please run /model key <api_key>.',
           },
         }
       }

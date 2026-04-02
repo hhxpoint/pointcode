@@ -70,7 +70,7 @@ export function ChannelsNotice() {
     }
     let t2;
     if ($[9] === Symbol.for("react.memo_cache_sentinel")) {
-      t2 = <Text dimColor={true}>Channels require claude.ai authentication · run /login, then restart</Text>;
+      t2 = <Text dimColor={true}>Channels require account-authenticated cloud access and are unavailable in API-key mode</Text>;
       $[9] = t2;
     } else {
       t2 = $[9];

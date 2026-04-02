@@ -109,7 +109,7 @@ export function createChromeContext(
     clientTypeId: 'claude-code',
     onAuthenticationError: () => {
       logger.warn(
-        'Authentication error occurred. Please ensure you are logged into the Claude browser extension with the same claude.ai account as Claude Code.',
+        'Authentication error occurred. Please ensure browser extension authentication is valid and matches your current PointCode account context.',
       )
     },
     onToolCallDisconnected: () => {

@@ -8,7 +8,7 @@ export default {
   get description() {
     return `Set the AI model for PointCode (currently ${renderModelName(getMainLoopModel())})`
   },
-  argumentHint: '[model|key <api_key>]',
+  argumentHint: '[model|key [api_key]]',
   get immediate() {
     return shouldInferenceConfigCommandBeImmediate()
   },

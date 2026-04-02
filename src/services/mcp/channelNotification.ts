@@ -223,7 +223,8 @@ export function gateChannelServer(
     return {
       action: 'skip',
       kind: 'auth',
-      reason: 'channels requires claude.ai authentication (run /login)',
+      reason:
+        'channels requires account-authenticated cloud access (API-key mode not supported)',
     }
   }
 

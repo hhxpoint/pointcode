@@ -22,7 +22,7 @@ export const call: LocalCommandCall = async () => {
       return {
         type: 'text' as const,
         value:
-          'Voice mode requires a Point account. Please run /login to sign in.',
+          'Voice mode is unavailable until API key is configured. Please run /model key <api_key>.',
       }
     }
     return {
@@ -75,7 +75,7 @@ export const call: LocalCommandCall = async () => {
     return {
       type: 'text' as const,
       value:
-        'Voice mode requires a Point account. Please run /login to sign in.',
+        'Voice mode is unavailable until API key is configured. Please run /model key <api_key>.',
     }
   }
 

@@ -12,7 +12,14 @@
       "Bash(npm whoami:*)",
       "Bash(npm profile:*)",
       "Bash(start:*)",
-      "Bash(npm publish:*)"
+      "Bash(npm publish:*)",
+      "Bash(git commit:*)",
+      "Bash(GIT_TRACE=1 git push origin main 2>&1)",
+      "Bash(npm version:*)",
+      "Bash(npm config:*)",
+      "Bash(git add:*)",
+      "Bash(git tag:*)",
+      "Bash(git push:*)"
     ]
   }
 }

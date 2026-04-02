@@ -1,10 +1,14 @@
 import { c as _c } from "react-compiler-runtime";
 import chalk from 'chalk';
 import * as React from 'react';
+import { useState } from 'react';
 import type { CommandResultDisplay } from '../../commands.js';
+import TextInput from '../../components/TextInput.js';
 import { ModelPicker } from '../../components/ModelPicker.js';
 import { COMMON_HELP_ARGS, COMMON_INFO_ARGS } from '../../constants/xml.js';
+import { useTerminalSize } from '../../hooks/useTerminalSize.js';
 import { type AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS, logEvent } from '../../services/analytics/index.js';
+import { Box, Text } from '../../ink.js';
 import { useAppState, useSetAppState } from '../../state/AppState.js';
 import type { LocalJSXCommandCall } from '../../types/command.js';
 import type { EffortLevel } from '../../utils/effort.js';
@@ -17,6 +21,64 @@ import { getAPIProvider } from '../../utils/model/providers.js';
 import { isModelAllowed } from '../../utils/model/modelAllowlist.js';
 import { validateModel } from '../../utils/model/validateModel.js';
 import { applyProviderProfileToProcessEnv, saveOpenAIProviderProfile } from '../../utils/providerSetup.js';
+function EnterApiKeyAndSave({
+  onDone
+}: {
+  onDone: (result?: string, options?: {
+    display?: CommandResultDisplay;
+  }) => void;
+}): React.ReactNode {
+  const terminalSize = useTerminalSize();
+  const [apiKey, setApiKey] = useState('');
+  const [cursorOffset, setCursorOffset] = useState(0);
+  const [errorText, setErrorText] = useState<string | null>(null);
+
+  function saveAndClose(input: string): void {
+    const value = input.trim();
+    if (!value) {
+      setErrorText('API key cannot be empty.');
+      return;
+    }
+    if (getAPIProvider() !== 'openai') {
+      onDone('Current provider is not OpenAI-compatible. Run /provider set <provider_id> first, then /model key <api_key>.', {
+        display: 'system'
+      });
+      return;
+    }
+
+    const profile = saveOpenAIProviderProfile({
+      OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
+      OPENAI_MODEL: process.env.OPENAI_MODEL,
+      OPENAI_API_KEY: value
+    });
+    applyProviderProfileToProcessEnv(profile);
+    onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
+      display: 'system'
+    });
+  }
+
+  return <Box flexDirection="column">
+      <Box marginBottom={1} flexDirection="column">
+        <Text bold={true}>Configure API key</Text>
+        <Text dimColor={true}>Paste your API key and press Enter. You can cancel with Esc.</Text>
+      </Box>
+      {errorText && <Box marginBottom={1}>
+          <Text color="error">{errorText}</Text>
+        </Box>}
+      <TextInput value={apiKey} onChange={value => {
+      if (errorText) {
+        setErrorText(null);
+      }
+      setApiKey(value);
+    }} onPaste={value => {
+      if (errorText) {
+        setErrorText(null);
+      }
+      setApiKey(value);
+    }} onSubmit={saveAndClose} focus={true} placeholder="sk-..." mask="*" columns={Math.max(50, terminalSize.columns)} cursorOffset={cursorOffset} onChangeCursorOffset={setCursorOffset} showCursor={true} />
+    </Box>;
+}
+
 function ModelPickerWrapper(t0) {
   const $ = _c(18);
   const {
@@ -330,13 +392,13 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
   args = args?.trim() || '';
   const missingOpenAIKeyTip = getMissingOpenAIKeyTip();
   if (!args && missingOpenAIKeyTip) {
-    onDone('OpenAI API key is missing. Please input it with: /model key <api_key> (you can also use /model sk-... ).', {
-      display: 'system'
-    });
-    return;
+    return <EnterApiKeyAndSave onDone={onDone} />;
   }
   if (missingOpenAIKeyTip && args.toLowerCase().startsWith('sk-')) {
     args = `key ${args}`;
+  }
+  if (args.toLowerCase() === 'key') {
+    return <EnterApiKeyAndSave onDone={onDone} />;
   }
   if (args.toLowerCase().startsWith('key ')) {
     const apiKey = args.slice(4).trim();
