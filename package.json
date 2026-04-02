@@ -1,6 +1,6 @@
 {
   "name": "pointcode",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "PointCode - 可自定义UI的AI编程助手",
   "type": "module",
   "bin": {
