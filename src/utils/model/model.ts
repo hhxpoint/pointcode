@@ -569,10 +569,19 @@ export function parseUserSpecifiedModel(
       case 'opusplan':
         return getDefaultSonnetModel() + (has1mTag ? '[1m]' : '') // Sonnet is default, Opus in plan mode
       case 'sonnet':
+        if (getAPIProvider() === 'openai') {
+          return modelInputTrimmed
+        }
         return getDefaultSonnetModel() + (has1mTag ? '[1m]' : '')
       case 'haiku':
+        if (getAPIProvider() === 'openai') {
+          return modelInputTrimmed
+        }
         return getDefaultHaikuModel() + (has1mTag ? '[1m]' : '')
       case 'opus':
+        if (getAPIProvider() === 'openai') {
+          return modelInputTrimmed
+        }
         return getDefaultOpusModel() + (has1mTag ? '[1m]' : '')
       case 'best':
         return getBestModel()

@@ -22,24 +22,33 @@ import { isModelAllowed } from '../../utils/model/modelAllowlist.js';
 import { validateModel } from '../../utils/model/validateModel.js';
 import { saveApiKey } from '../../utils/auth.js';
 import { applyProviderProfileToProcessEnv, saveOpenAIProviderProfile } from '../../utils/providerSetup.js';
+import { getCNProviderList } from '../../utils/cnProviders.js';
+
+function resolveBaseUrlForModel(model: string | null | undefined): string | undefined {
+  if (!model) {
+    return process.env.OPENAI_BASE_URL;
+  }
+  const provider = getCNProviderList().find(item => item.models.some(m => m.id === model));
+  if (provider) {
+    return provider.baseUrl;
+  }
+  return process.env.OPENAI_BASE_URL;
+}
 async function saveModelApiKey(value: string, onDone: (result?: string, options?: {
   display?: CommandResultDisplay;
-}) => void): Promise<void> {
-  if (getAPIProvider() === 'openai') {
+}) => void, modelValue?: string | null): Promise<void> {
+  try {
+    const openAIModel = modelValue ?? process.env.OPENAI_MODEL ?? 'qwen3.5-plus';
+    const openAIBaseUrl = resolveBaseUrlForModel(openAIModel) ?? 'https://dashscope.aliyuncs.com/compatible-mode/v1';
     const profile = saveOpenAIProviderProfile({
-      OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
-      OPENAI_MODEL: process.env.OPENAI_MODEL,
+      OPENAI_BASE_URL: openAIBaseUrl,
+      OPENAI_MODEL: openAIModel,
       OPENAI_API_KEY: value
     });
     applyProviderProfileToProcessEnv(profile);
-    onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
-      display: 'system'
-    });
-    return;
-  }
-  try {
+    process.env.CLAUDE_CODE_USE_OPENAI = '1';
+    delete process.env.ANTHROPIC_API_KEY;
     await saveApiKey(value);
-    process.env.ANTHROPIC_API_KEY = value;
     onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
       display: 'system'
     });
@@ -50,11 +59,13 @@ async function saveModelApiKey(value: string, onDone: (result?: string, options?
   }
 }
 function EnterApiKeyAndSave({
-  onDone
+  onDone,
+  modelValue
 }: {
   onDone: (result?: string, options?: {
     display?: CommandResultDisplay;
   }) => void;
+  modelValue?: string | null;
 }): React.ReactNode {
   const terminalSize = useTerminalSize();
   const [apiKey, setApiKey] = useState('');
@@ -67,7 +78,7 @@ function EnterApiKeyAndSave({
       setErrorText('API key cannot be empty.');
       return;
     }
-    void saveModelApiKey(value, onDone);
+    void saveModelApiKey(value, onDone, modelValue);
   }
 
   return <Box flexDirection="column">
@@ -168,7 +179,7 @@ function ModelPickerWrapper(t0: {
     }
 
     let selectedModel = model;
-    if (selectedModel !== null && getAPIProvider() === 'openai') {
+    if (selectedModel !== null) {
       selectedModel = switchOpenAIModel(selectedModel);
     }
 
@@ -186,7 +197,7 @@ function ModelPickerWrapper(t0: {
   const showFastModeNotice = isFastModeEnabled() && isFastMode && isFastModeSupportedByModel(mainLoopModel) && isFastModeAvailable();
 
   if (pendingSelection) {
-    return <EnterApiKeyAndSave onDone={(result, options) => {
+    return <EnterApiKeyAndSave modelValue={pendingSelection.model} onDone={(result, options) => {
       if (!result || !result.startsWith('API key saved')) {
         onDone(result, options);
         return;
