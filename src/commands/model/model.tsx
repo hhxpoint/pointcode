@@ -24,6 +24,22 @@ import { saveApiKey } from '../../utils/auth.js';
 import { applyProviderProfileToProcessEnv, saveOpenAIProviderProfile } from '../../utils/providerSetup.js';
 import { getCNProviderList } from '../../utils/cnProviders.js';
 
+function clearThirdPartyProviderFlags(): void {
+  delete process.env.CLAUDE_CODE_USE_OPENAI;
+  delete process.env.CLAUDE_CODE_USE_GEMINI;
+  delete process.env.CLAUDE_CODE_USE_BEDROCK;
+  delete process.env.CLAUDE_CODE_USE_VERTEX;
+  delete process.env.CLAUDE_CODE_USE_FOUNDRY;
+}
+
+function isAnthropicFamilyModel(model: string | null | undefined): boolean {
+  if (!model) {
+    return false;
+  }
+  const normalized = model.toLowerCase();
+  return normalized.includes('opus') || normalized.includes('sonnet') || normalized.includes('haiku') || normalized.includes('claude');
+}
+
 function resolveBaseUrlForModel(model: string | null | undefined): string | undefined {
   if (!model) {
     return process.env.OPENAI_BASE_URL;
@@ -38,6 +54,17 @@ async function saveModelApiKey(value: string, onDone: (result?: string, options?
   display?: CommandResultDisplay;
 }) => void, modelValue?: string | null): Promise<void> {
   try {
+    if (isAnthropicFamilyModel(modelValue) || /^sk-ant/i.test(value)) {
+      clearThirdPartyProviderFlags();
+      await saveApiKey(value);
+      process.env.ANTHROPIC_API_KEY = value;
+      delete process.env.OPENAI_API_KEY;
+      onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
+        display: 'system'
+      });
+      return;
+    }
+
     const openAIModel = modelValue ?? process.env.OPENAI_MODEL ?? 'qwen3.5-plus';
     const openAIBaseUrl = resolveBaseUrlForModel(openAIModel) ?? 'https://dashscope.aliyuncs.com/compatible-mode/v1';
     const profile = saveOpenAIProviderProfile({
@@ -179,7 +206,7 @@ function ModelPickerWrapper(t0: {
     }
 
     let selectedModel = model;
-    if (selectedModel !== null) {
+    if (selectedModel !== null && !isAnthropicFamilyModel(selectedModel)) {
       selectedModel = switchOpenAIModel(selectedModel);
     }
 
