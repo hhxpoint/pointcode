@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"D:\\\\agent\\\\pointcode\\\\scripts\\\\install\"*)",
+      "Bash(dir \"D:\\\\agent\\\\pointcode\\\\scripts\")",
+      "Bash(dir \"D:\\\\agent\\\\pointcode\\\\DEPLOYMENT.md\")",
+      "Bash(npm -v)",
+      "Bash(bun -v)",
+      "Bash(bun run:*)"
+    ]
+  }
+}
