@@ -10,12 +10,12 @@
 
 ### Linux/Mac
 ```bash
-curl -fsSL https://raw.githubusercontent.com/your-username/pointcode/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/hhxpoint/pointcode/main/scripts/install.sh | bash
 ```
 
 ### Windows PowerShell
 ```powershell
-iwr https://raw.githubusercontent.com/your-username/pointcode/main/scripts/install.ps1 -useb | iex
+iwr https://raw.githubusercontent.com/hhxpoint/pointcode/main/scripts/install.ps1 -useb | iex
 ```
 
 ### npm 全局安装
@@ -26,6 +26,54 @@ npm install -g pointcode
 ### npx 免安装使用
 ```bash
 npx pointcode
+```
+
+---
+
+## 当前状态
+
+| 任务 | 状态 |
+|------|------|
+| GitHub 仓库创建 | ✅ 已完成 - https://github.com/hhxpoint/pointcode |
+| 代码推送 | ✅ 已完成 |
+| README 更新 | ✅ 已完成（专业版带图表） |
+| 安装脚本 | ✅ 已完成 |
+| npm 发布 | ⏳ 待完成（需要交互式登录） |
+
+---
+
+## 剩余步骤：发布到 npm
+
+### 登录 npm
+
+```bash
+npm login
+```
+
+系统会提示输入：
+- Username: 你的 npm 用户名
+- Password: 你的 npm 密码
+- Email: 你的邮箱
+
+### 发布包
+
+```bash
+# 确保已构建
+bun run build
+
+# 发布到 npm
+npm publish --access public
+```
+
+### 验证发布
+
+```bash
+# 测试 npx 运行
+npx pointcode --version
+
+# 测试全局安装
+npm install -g pointcode
+pointcode --version
 ```
 
 ---

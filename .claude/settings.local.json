@@ -6,7 +6,10 @@
       "Bash(dir \"D:\\\\agent\\\\pointcode\\\\DEPLOYMENT.md\")",
       "Bash(npm -v)",
       "Bash(bun -v)",
-      "Bash(bun run:*)"
+      "Bash(bun run:*)",
+      "Bash(GIT_TRACE=1 git push --set-upstream origin main --force)",
+      "Bash(curl:*)",
+      "Bash(npm whoami:*)"
     ]
   }
 }
