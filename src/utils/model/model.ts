@@ -256,7 +256,7 @@ export function getDefaultMainLoopModelSetting(): ModelName | ModelAlias {
   }
   // OpenAI provider: always use the configured OpenAI model
   if (getAPIProvider() === 'openai') {
-    return process.env.OPENAI_MODEL || 'gpt-4o'
+    return process.env.OPENAI_MODEL || 'qwen3.5-plus'
   }
 
   // Ants default to defaultModel from flag config, or Opus 1M if not configured
@@ -277,9 +277,8 @@ export function getDefaultMainLoopModelSetting(): ModelName | ModelAlias {
     return getDefaultOpusModel() + (isOpus1mMergeEnabled() ? '[1m]' : '')
   }
 
-  // PAYG (1P and 3P), Enterprise, Team Standard, and Pro get Sonnet as default
-  // Note that PAYG (3P) may default to an older Sonnet model
-  return getDefaultSonnetModel()
+  // PointCode default model.
+  return 'qwen3.5-plus'
 }
 
 /**
@@ -369,13 +368,10 @@ export function getCanonicalName(fullModelName: ModelName): ModelShortName {
 export function getClaudeAiUserDefaultModelDescription(
   fastMode = false,
 ): string {
-  if (isMaxSubscriber() || isTeamPremiumSubscriber()) {
-    if (isOpus1mMergeEnabled()) {
-      return `Opus 4.6 with 1M context · Most capable for complex work${fastMode ? getOpus46PricingSuffix(true) : ''}`
-    }
-    return `Opus 4.6 · Most capable for complex work${fastMode ? getOpus46PricingSuffix(true) : ''}`
+  if (fastMode) {
+    return 'Qwen 3.5 Plus · Recommended default'
   }
-  return 'Sonnet 4.6 · Best for everyday tasks'
+  return 'Qwen 3.5 Plus · Recommended default'
 }
 
 export function renderDefaultModelSetting(
@@ -558,6 +554,14 @@ export function parseUserSpecifiedModel(
 
   if (isModelAlias(modelString)) {
     switch (modelString) {
+      case 'qwen':
+        return 'qwen3.5-plus' + (has1mTag ? '[1m]' : '')
+      case 'deepseek':
+        return 'deepseek-chat' + (has1mTag ? '[1m]' : '')
+      case 'glm':
+        return 'glm-5' + (has1mTag ? '[1m]' : '')
+      case 'mimo':
+        return 'mimo-v2-pro' + (has1mTag ? '[1m]' : '')
       case 'codexplan':
         return modelInputTrimmed
       case 'codexspark':

@@ -490,6 +490,61 @@ function getKnownModelOption(model: string): ModelOption | null {
 }
 
 export function getModelOptions(fastMode = false): ModelOption[] {
+  const pointCodeOptions: ModelOption[] = [
+    {
+      value: null,
+      label: 'Default (recommended)',
+      description: 'Use the default model (currently qwen3.5-plus)',
+    },
+    {
+      value: 'qwen3.5-plus',
+      label: 'Qwen 3.5 Plus',
+      description: 'Tongyi Qwen · balanced quality and speed',
+    },
+    {
+      value: 'qwen3.5-flash',
+      label: 'Qwen 3.5 Flash',
+      description: 'Tongyi Qwen · fastest for quick tasks',
+    },
+    {
+      value: 'deepseek-chat',
+      label: 'DeepSeek Chat',
+      description: 'DeepSeek general model',
+    },
+    {
+      value: 'deepseek-reasoner',
+      label: 'DeepSeek Reasoner',
+      description: 'DeepSeek reasoning-focused model',
+    },
+    {
+      value: 'glm-5',
+      label: 'GLM-5',
+      description: 'Zhipu GLM flagship model',
+    },
+    {
+      value: 'glm-5-turbo',
+      label: 'GLM-5 Turbo',
+      description: 'Zhipu GLM fast model',
+    },
+    {
+      value: 'mimo-v2-pro',
+      label: 'MiMo V2 Pro',
+      description: 'Xiaomi MiMo high capability model',
+    },
+    {
+      value: 'mimo-v2-flash',
+      label: 'MiMo V2 Flash',
+      description: 'Xiaomi MiMo fast model',
+    },
+    {
+      value: 'opus',
+      label: 'Opus',
+      description: 'Anthropic Opus for complex reasoning',
+    },
+  ]
+
+  return filterModelOptionsByAllowlist(pointCodeOptions)
+
   if (getAPIProvider() === 'openai') {
     const presetOptions = getOpenAIPresetOptions()
     const remoteOptions = getCachedOpenAIModelOptions(presetOptions)
