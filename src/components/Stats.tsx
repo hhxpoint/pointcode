@@ -94,7 +94,7 @@ export function Stats(t0) {
   const allTimePromise = t1;
   let t2;
   if ($[1] === Symbol.for("react.memo_cache_sentinel")) {
-    t2 = <Box marginTop={1}><Spinner /><Text> Loading your Claude Code stats…</Text></Box>;
+    t2 = <Box marginTop={1}><Spinner /><Text> Loading your PointCode stats...</Text></Box>;
     $[1] = t2;
   } else {
     t2 = $[1];
@@ -242,7 +242,7 @@ function StatsContent(t0) {
   if (allTimeResult.type === "empty") {
     let t7;
     if ($[15] === Symbol.for("react.memo_cache_sentinel")) {
-      t7 = <Box marginTop={1}><Text color="warning">No stats available yet. Start using Claude Code!</Text></Box>;
+      t7 = <Box marginTop={1}><Text color="warning">No stats available yet. Start using PointCode!</Text></Box>;
       $[15] = t7;
     } else {
       t7 = $[15];
@@ -252,7 +252,7 @@ function StatsContent(t0) {
   if (!displayStats || !allTimeStats) {
     let t7;
     if ($[16] === Symbol.for("react.memo_cache_sentinel")) {
-      t7 = <Box marginTop={1}><Spinner /><Text> Loading stats…</Text></Box>;
+      t7 = <Box marginTop={1}><Spinner /><Text> Loading stats...</Text></Box>;
       $[16] = t7;
     } else {
       t7 = $[16];
@@ -1057,7 +1057,7 @@ function generateXAxisLabels(data: DailyModelTokens[], _chartWidth: number, yAxi
 
 // Screenshot functionality
 async function handleScreenshot(stats: ClaudeCodeStats, activeTab: 'Overview' | 'Models', setStatus: (status: string | null) => void): Promise<void> {
-  setStatus('copying…');
+  setStatus('copying...');
   const ansiText = renderStatsToAnsi(stats, activeTab);
   const result = await copyAnsiToClipboard(ansiText);
   setStatus(result.success ? 'copied!' : 'copy failed');

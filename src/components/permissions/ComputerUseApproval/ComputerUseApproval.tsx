@@ -24,7 +24,7 @@ const DENY_ALL_RESPONSE: CuPermissionResponse = {
 /**
  * Two-panel dispatcher. When `request.tccState` is present, macOS permissions
  * (Accessibility / Screen Recording) are missing and the app list is
- * irrelevant â€” show a TCC panel that opens System Settings. Otherwise show the
+ * irrelevant â€?show a TCC panel that opens System Settings. Otherwise show the
  * app allowlist + grant-flags panel.
  */
 export function ComputerUseApproval(t0) {
@@ -161,7 +161,7 @@ function ComputerUseTccPanel(t0) {
   }
   let t7;
   if ($[15] === Symbol.for("react.memo_cache_sentinel")) {
-    t7 = <Text dimColor={true}>Grant the missing permissions in System Settings, then select "Try again". macOS may require you to restart Claude Code after granting Screen Recording.</Text>;
+    t7 = <Text dimColor={true}>Grant the missing permissions in System Settings, then select "Try again". macOS may require you to restart PointCode after granting Screen Recording.</Text>;
     $[15] = t7;
   } else {
     t7 = $[15];

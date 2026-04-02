@@ -239,7 +239,7 @@ export function ManageMarketplaces({
       // those marketplaces to the new version. Without this, the loader's
       // cache-on-miss (copyPluginToVersionedCache) creates the new version
       // dir on the next loadAllPlugins() call, but installed_plugins.json
-      // stays on the old version â€” so cleanupOrphanedPluginVersionsInBackground
+      // stays on the old version â€?so cleanupOrphanedPluginVersionsInBackground
       // stamps the NEW dir with .orphaned_at on the next startup. See #29512.
       // updatePluginOp (called inside the helper) is what actually writes
       // installed_plugins.json via updateInstallationPathOnDisk.
@@ -441,7 +441,7 @@ export function ManageMarketplaces({
     isActive: !isProcessing && internalView === 'list' && !hasPendingChanges()
   });
 
-  // List view â€” navigation (up/down/enter via configurable keybindings)
+  // List view â€?navigation (up/down/enter via configurable keybindings)
   useKeybindings({
     'select:previous': () => setSelectedIndex(prev => Math.max(0, prev - 1)),
     'select:next': () => {
@@ -470,7 +470,7 @@ export function ManageMarketplaces({
     isActive: !isProcessing && internalView === 'list'
   });
 
-  // List view â€” marketplace-specific actions (u/r shortcuts)
+  // List view â€?marketplace-specific actions (u/r shortcuts)
   useInput(input => {
     const marketplaceIndex = selectedIndex - 1;
     if ((input === 'u' || input === 'U') && marketplaceIndex >= 0) {
@@ -490,7 +490,7 @@ export function ManageMarketplaces({
     isActive: !isProcessing && internalView === 'list'
   });
 
-  // Details view â€” navigation
+  // Details view â€?navigation
   useKeybindings({
     'select:previous': () => setDetailsMenuIndex(prev => Math.max(0, prev - 1)),
     'select:next': () => {
@@ -524,7 +524,7 @@ export function ManageMarketplaces({
     isActive: !isProcessing && internalView === 'details'
   });
 
-  // Confirm-remove view â€” y/n input
+  // Confirm-remove view â€?y/n input
   useInput(input => {
     if (input === 'y' || input === 'Y') {
       void confirmRemove();
@@ -536,7 +536,7 @@ export function ManageMarketplaces({
     isActive: !isProcessing && internalView === 'confirm-remove'
   });
   if (loading) {
-    return <Text>Loading marketplacesâ€¦</Text>;
+    return <Text>Loading marketplaces...</Text>;
   }
   if (marketplaceStates.length === 0) {
     return <Box flexDirection="column">
@@ -579,7 +579,7 @@ export function ManageMarketplaces({
             </Box>}
           {selectedMarketplace.installedPlugins && selectedMarketplace.installedPlugins.length > 0 && <Box flexDirection="column" marginTop={1} marginLeft={2}>
                 {selectedMarketplace.installedPlugins.map(plugin => <Text key={plugin.name} dimColor>
-                    â€¢ {plugin.name}
+                    â€?{plugin.name}
                   </Text>)}
               </Box>}
           <Box marginTop={1}>
@@ -627,7 +627,7 @@ export function ManageMarketplaces({
 
         {/* Processing indicator */}
         {isUpdating && <Box marginTop={1} flexDirection="column">
-            <Text color="claude">Updating marketplaceâ€¦</Text>
+            <Text color="claude">Updating marketplace...</Text>
             {progressMessage && <Text dimColor>{progressMessage}</Text>}
           </Box>}
 
@@ -658,14 +658,14 @@ export function ManageMarketplaces({
         {/* Show explanatory text at the bottom when auto-update is enabled */}
         {!isUpdating && !shouldSkipPluginAutoupdate() && selectedMarketplace.autoUpdate && <Box marginTop={1}>
               <Text dimColor>
-                Auto-update enabled. Claude Code will automatically update this
+                Auto-update enabled. PointCode will automatically update this
                 marketplace and its installed plugins.
               </Text>
             </Box>}
 
         <Box marginLeft={3}>
           <Text dimColor italic>
-            {isUpdating ? <>Please waitâ€¦</> : <Byline>
+            {isUpdating ? <>Please wait...</> : <Byline>
                 <ConfigurableShortcutHint action="select:accept" context="Select" fallback="Enter" description="select" />
                 <ConfigurableShortcutHint action="confirm:no" context="Confirmation" fallback="Esc" description="go back" />
               </Byline>}
@@ -711,19 +711,19 @@ export function ManageMarketplaces({
               <Box flexDirection="column" flexGrow={1}>
                 <Box flexDirection="row" gap={1}>
                   <Text bold strikethrough={state.pendingRemove} dimColor={state.pendingRemove}>
-                    {state.name === 'claude-plugins-official' && <Text color="claude">âœ» </Text>}
+                    {state.name === 'claude-plugins-official' && <Text color="claude">[official]</Text>}
                     {state.name}
-                    {state.name === 'claude-plugins-official' && <Text color="claude"> âœ»</Text>}
+                    {state.name === 'claude-plugins-official' && <Text color="claude"> [official]</Text>}
                   </Text>
                   {indicators.length > 0 && <Text color="warning">[{indicators.join(', ')}]</Text>}
                 </Box>
                 <Text dimColor>{state.source}</Text>
                 <Text dimColor>
                   {state.pluginCount !== undefined && <>{state.pluginCount} available</>}
-                  {state.installedPlugins && state.installedPlugins.length > 0 && <> â€¢ {state.installedPlugins.length} installed</>}
+                  {state.installedPlugins && state.installedPlugins.length > 0 && <> - {state.installedPlugins.length} installed</>}
                   {state.lastUpdated && <>
                       {' '}
-                      â€¢ Updated{' '}
+                      â€?Updated{' '}
                       {new Date(state.lastUpdated).toLocaleDateString()}
                     </>}
                 </Text>
@@ -739,16 +739,16 @@ export function ManageMarketplaces({
             <Text dimColor>Enter to apply</Text>
           </Text>
           {updateCount > 0 && <Text>
-              â€¢ Update {updateCount} {plural(updateCount, 'marketplace')}
+              â€?Update {updateCount} {plural(updateCount, 'marketplace')}
             </Text>}
           {removeCount > 0 && <Text color="warning">
-              â€¢ Remove {removeCount} {plural(removeCount, 'marketplace')}
+              â€?Remove {removeCount} {plural(removeCount, 'marketplace')}
             </Text>}
         </Box>}
 
       {/* Processing indicator */}
       {isProcessing && <Box marginTop={1}>
-          <Text color="claude">Processing changesâ€¦</Text>
+          <Text color="claude">Processing changes...</Text>
         </Box>}
 
       {/* Error display */}

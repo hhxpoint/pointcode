@@ -63,7 +63,7 @@ type OauthConfig = {
   CLAUDE_AI_AUTHORIZE_URL: string
   /**
    * The claude.ai web origin. Separate from CLAUDE_AI_AUTHORIZE_URL because
-   * that now routes through claude.com/cai/* for attribution â€” deriving
+   * that now routes through claude.com/cai/* for attribution â€?deriving
    * .origin from it would give claude.com, breaking links to /code,
    * /settings/connectors, and other claude.ai web pages.
    */
@@ -106,7 +106,7 @@ const PROD_OAUTH_CONFIG = {
 /**
  * Client ID Metadata Document URL for MCP OAuth (CIMD / SEP-991).
  * When an MCP auth server advertises client_id_metadata_document_supported: true,
- * Claude Code uses this URL as its client_id instead of Dynamic Client Registration.
+ * PointCode uses this URL as its client_id instead of Dynamic Client Registration.
  * The URL must point to a JSON document hosted by Anthropic.
  * See: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-client-id-metadata-document-00
  */

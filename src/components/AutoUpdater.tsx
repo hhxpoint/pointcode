@@ -181,14 +181,13 @@ export function AutoUpdater({
       {isUpdating ? <>
           <Box>
             <Text color="text" dimColor wrap="truncate">
-              Auto-updatingâ€¦
-            </Text>
+              Auto-updatingâ€?            </Text>
           </Box>
         </> : autoUpdaterResult?.status === 'success' && showSuccessMessage && updateSemver && <Text color="success" wrap="truncate">
-            âœ“ Update installed Â· Restart to apply
+            âœ?Update installed Â· Restart to apply
           </Text>}
       {(autoUpdaterResult?.status === 'install_failed' || autoUpdaterResult?.status === 'no_permissions') && <Text color="error" wrap="truncate">
-          âœ— Auto-update failed &middot; Try <Text bold>claude doctor</Text> or{' '}
+          âœ?Auto-update failed &middot; Try <Text bold>pointcode doctor</Text> or{' '}
           <Text bold>
             {hasLocalInstall ? `cd ~/.claude/local && npm update ${MACRO.PACKAGE_URL}` : `npm i -g ${MACRO.PACKAGE_URL}`}
           </Text>

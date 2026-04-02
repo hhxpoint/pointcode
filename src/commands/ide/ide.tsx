@@ -128,7 +128,7 @@ function IDEScreen(t0) {
   }
   let t5;
   if ($[17] !== availableIDEs.length) {
-    t5 = availableIDEs.length === 0 && <Text dimColor={true}>{isSupportedJetBrainsTerminal() ? "No available IDEs detected. Please install the plugin and restart your IDE:\nhttps://docs.claude.com/s/claude-code-jetbrains" : "No available IDEs detected. Make sure your IDE has the Claude Code extension or plugin installed and is running."}</Text>;
+    t5 = availableIDEs.length === 0 && <Text dimColor={true}>{isSupportedJetBrainsTerminal() ? "No available IDEs detected. Please install the plugin and restart your IDE:\nhttps://docs.claude.com/s/claude-code-jetbrains" : "No available IDEs detected. Make sure your IDE has the PointCode extension or plugin installed and is running."}</Text>;
     $[17] = availableIDEs.length;
     $[18] = t5;
   } else {
@@ -150,7 +150,7 @@ function IDEScreen(t0) {
   }
   let t7;
   if ($[24] !== availableIDEs) {
-    t7 = availableIDEs.length !== 0 && availableIDEs.some(_temp2) && <Box marginTop={1}><Text color="warning">Note: Only one Claude Code instance can be connected to VS Code at a time.</Text></Box>;
+    t7 = availableIDEs.length !== 0 && availableIDEs.some(_temp2) && <Box marginTop={1}><Text color="warning">Note: Only one PointCode instance can be connected to VS Code at a time.</Text></Box>;
     $[24] = availableIDEs;
     $[25] = t7;
   } else {
@@ -196,7 +196,7 @@ function IDEScreen(t0) {
   return t11;
 }
 function _temp3(ide_3, index) {
-  return <Box key={index} paddingLeft={3}><Text dimColor={true}>• {ide_3.name}: {formatWorkspaceFolders(ide_3.workspaceFolders)}</Text></Box>;
+  return <Box key={index} paddingLeft={3}><Text dimColor={true}>�?{ide_3.name}: {formatWorkspaceFolders(ide_3.workspaceFolders)}</Text></Box>;
 }
 function _temp2(ide_2) {
   return ide_2.name === "VS Code" || ide_2.name === "Visual Studio Code";
@@ -436,7 +436,7 @@ export async function call(onDone: (result?: string, options?: {
     const detectedIDEs = await detectIDEs(true);
     const availableIDEs = detectedIDEs.filter(ide => ide.isValid);
     if (availableIDEs.length === 0) {
-      onDone('No IDEs with Claude Code extension detected.');
+      onDone('No IDEs with PointCode extension detected.');
       return null;
     }
 
@@ -531,7 +531,7 @@ function IDECommandFlow({
   // Watch for connection result
   useEffect(() => {
     if (!connectingIDE) return;
-    // Skip the first check — it reflects stale state from before the
+    // Skip the first check �?it reflects stale state from before the
     // config change was dispatched
     if (isFirstCheckRef.current) {
       isFirstCheckRef.current = false;
@@ -596,7 +596,7 @@ function IDECommandFlow({
     onChangeDynamicMcpConfig(newConfig);
   }, [dynamicMcpConfig, currentIDE, ideClient, setAppState, onChangeDynamicMcpConfig, onDone]);
   if (connectingIDE) {
-    return <Text dimColor>Connecting to {connectingIDE.name}…</Text>;
+    return <Text dimColor>Connecting to {connectingIDE.name}...</Text>;
   }
   return <IDEScreen availableIDEs={availableIDEs} unavailableIDEs={unavailableIDEs} selectedIDE={currentIDE} onClose={() => onDone('IDE selection cancelled', {
     display: 'system'
@@ -617,8 +617,8 @@ export function formatWorkspaceFolders(folders: string[], maxLength: number = 10
   const foldersToShow = folders.slice(0, 2);
   const hasMore = folders.length > 2;
 
-  // Account for ", …" if there are more folders
-  const ellipsisOverhead = hasMore ? 3 : 0; // ", …"
+  // Account for ", ..." if there are more folders
+  const ellipsisOverhead = hasMore ? 4 : 0; // ", ..."
 
   // Account for commas and spaces between paths (", " = 2 chars per separator)
   const separatorOverhead = (foldersToShow.length - 1) * 2;
@@ -635,11 +635,11 @@ export function formatWorkspaceFolders(folders: string[], maxLength: number = 10
     if (folder.length <= maxLengthPerPath) {
       return folder;
     }
-    return '…' + folder.slice(-(maxLengthPerPath - 1));
+    return '...' + folder.slice(-(maxLengthPerPath - 3));
   });
   let result = formattedFolders.join(', ');
   if (hasMore) {
-    result += ', …';
+    result += ', ...';
   }
   return result;
 }

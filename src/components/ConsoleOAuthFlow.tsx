@@ -241,7 +241,7 @@ export function ConsoleOAuthFlow({
           state: 'success'
         });
         void sendNotification({
-          message: 'Claude Code login successful',
+          message: 'PointCode login successful',
           notificationType: 'auth_success'
         }, terminal);
       }
@@ -309,7 +309,7 @@ export function ConsoleOAuthFlow({
         </Box>}
       {mode === 'setup-token' && oauthStatus.state === 'success' && oauthStatus.token && <Box key="tokenOutput" flexDirection="column" gap={1} paddingTop={1}>
             <Text color="success">
-              ✓ Long-lived authentication token created successfully!
+              �?Long-lived authentication token created successfully!
             </Text>
             <Box flexDirection="column" gap={1}>
               <Text>Your OAuth token (valid for 1 year):</Text>
@@ -364,7 +364,7 @@ function OAuthStatusMessage(t0) {
   switch (oauthStatus.state) {
     case "idle":
       {
-        const t1 = startingMessage ? startingMessage : "Claude Code can be used with your Claude subscription or billed based on API usage through your Console account.";
+        const t1 = startingMessage ? startingMessage : "PointCode can be used with your Claude subscription or billed based on API usage through your Console account.";
         let t2;
         if ($[0] !== t1) {
           t2 = <Text bold={true}>{t1}</Text>;
@@ -460,7 +460,7 @@ function OAuthStatusMessage(t0) {
         let t2;
         let t3;
         if ($[13] === Symbol.for("react.memo_cache_sentinel")) {
-          t2 = <Text>Claude Code supports Amazon Bedrock, Microsoft Foundry, and Vertex AI. Set the required environment variables, then restart Claude Code.</Text>;
+          t2 = <Text>PointCode supports Amazon Bedrock, Microsoft Foundry, and Vertex AI. Set the required environment variables, then restart PointCode.</Text>;
           t3 = <Text>If you are part of an enterprise organization, contact your administrator for setup instructions.</Text>;
           $[13] = t2;
           $[14] = t3;
@@ -517,7 +517,7 @@ function OAuthStatusMessage(t0) {
         }
         let t2;
         if ($[22] !== showPastePrompt) {
-          t2 = !showPastePrompt && <Box><Spinner /><Text>Opening browser to sign in…</Text></Box>;
+          t2 = !showPastePrompt && <Box><Spinner /><Text>Opening browser to sign in...</Text></Box>;
           $[22] = showPastePrompt;
           $[23] = t2;
         } else {
@@ -554,7 +554,7 @@ function OAuthStatusMessage(t0) {
       {
         let t1;
         if ($[37] === Symbol.for("react.memo_cache_sentinel")) {
-          t1 = <Box flexDirection="column" gap={1}><Box><Spinner /><Text>Creating API key for Claude Code…</Text></Box></Box>;
+          t1 = <Box flexDirection="column" gap={1}><Box><Spinner /><Text>Creating API key for PointCode...</Text></Box></Box>;
           $[37] = t1;
         } else {
           t1 = $[37];
@@ -565,7 +565,7 @@ function OAuthStatusMessage(t0) {
       {
         let t1;
         if ($[38] === Symbol.for("react.memo_cache_sentinel")) {
-          t1 = <Box flexDirection="column" gap={1}><Text color="permission">Retrying…</Text></Box>;
+          t1 = <Box flexDirection="column" gap={1}><Text color="permission">Retrying...</Text></Box>;
           $[38] = t1;
         } else {
           t1 = $[38];
@@ -576,7 +576,7 @@ function OAuthStatusMessage(t0) {
       {
         let t1;
         if ($[39] !== mode || $[40] !== oauthStatus.token) {
-          t1 = mode === "setup-token" && oauthStatus.token ? null : <>{getOauthAccountInfo()?.emailAddress ? <Text dimColor={true}>Logged in as{" "}<Text>{getOauthAccountInfo()?.emailAddress}</Text></Text> : null}<Text color="success">Login successful. Press <Text bold={true}>Enter</Text> to continue…</Text></>;
+          t1 = mode === "setup-token" && oauthStatus.token ? null : <>{getOauthAccountInfo()?.emailAddress ? <Text dimColor={true}>Logged in as{" "}<Text>{getOauthAccountInfo()?.emailAddress}</Text></Text> : null}<Text color="success">Login successful. Press <Text bold={true}>Enter</Text> to continue...</Text></>;
           $[39] = mode;
           $[40] = oauthStatus.token;
           $[41] = t1;

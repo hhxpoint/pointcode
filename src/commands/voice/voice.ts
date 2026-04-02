@@ -22,7 +22,7 @@ export const call: LocalCommandCall = async () => {
       return {
         type: 'text' as const,
         value:
-          'Voice mode requires a Claude.ai account. Please run /login to sign in.',
+          'Voice mode requires a Point account. Please run /login to sign in.',
       }
     }
     return {
@@ -34,7 +34,7 @@ export const call: LocalCommandCall = async () => {
   const currentSettings = getInitialSettings()
   const isCurrentlyEnabled = currentSettings.voiceEnabled === true
 
-  // Toggle OFF â€” no checks needed
+  // Toggle OFF â€?no checks needed
   if (isCurrentlyEnabled) {
     const result = updateSettingsForSource('userSettings', {
       voiceEnabled: false,
@@ -54,7 +54,7 @@ export const call: LocalCommandCall = async () => {
     }
   }
 
-  // Toggle ON â€” run pre-flight checks first
+  // Toggle ON â€?run pre-flight checks first
   const { isVoiceStreamAvailable } = await import(
     '../../services/voiceStreamSTT.js'
   )
@@ -75,7 +75,7 @@ export const call: LocalCommandCall = async () => {
     return {
       type: 'text' as const,
       value:
-        'Voice mode requires a Claude.ai account. Please run /login to sign in.',
+        'Voice mode requires a Point account. Please run /login to sign in.',
     }
   }
 
@@ -111,7 +111,7 @@ export const call: LocalCommandCall = async () => {
     }
   }
 
-  // All checks passed â€” enable voice
+  // All checks passed â€?enable voice
   const result = updateSettingsForSource('userSettings', { voiceEnabled: true })
   if (result.error) {
     return {

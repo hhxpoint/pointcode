@@ -72,7 +72,7 @@ function formatPathLink(filePath: string): string {
 }
 export function shouldOfferTerminalSetup(): boolean {
   // iTerm2, WezTerm, Ghostty, Kitty, and Warp natively support CSI u / Kitty
-  // keyboard protocol, which Claude Code already parses. No setup needed for
+  // keyboard protocol, which PointCode already parses. No setup needed for
   // these terminals.
   return platform() === 'darwin' && env.terminal === 'Apple_Terminal' || env.terminal === 'vscode' || env.terminal === 'cursor' || env.terminal === 'windsurf' || env.terminal === 'alacritty' || env.terminal === 'zed';
 }
@@ -156,9 +156,9 @@ No configuration needed. Just use Shift+Enter to add newlines.`;
     // Build platform-specific terminal suggestions
     let platformTerminals = '';
     if (currentPlatform === 'macos') {
-      platformTerminals = '   â€¢ macOS: Apple Terminal\n';
+      platformTerminals = '   â€?macOS: Apple Terminal\n';
     } else if (currentPlatform === 'windows') {
-      platformTerminals = '   â€¢ Windows: Windows Terminal\n';
+      platformTerminals = '   â€?Windows: Windows Terminal\n';
     }
     // For Linux and other platforms, we don't show native terminal options
     // since they're not currently supported
@@ -171,8 +171,8 @@ ${chalk.dim('Note: You can already use backslash (\\\\) + return to add newlines
 To set up the shortcut (optional):
 1. Exit tmux/screen temporarily
 2. Run /terminal-setup directly in one of these terminals:
-${platformTerminals}   â€¢ IDE: VSCode, Cursor, Windsurf, Zed
-   â€¢ Other: Alacritty
+${platformTerminals}   â€?IDE: VSCode, Cursor, Windsurf, Zed
+   â€?Other: Alacritty
 3. Return to tmux/screen - settings will persist
 
 ${chalk.dim('Note: iTerm2, WezTerm, Ghostty, Kitty, and Warp support Shift+Enter natively.')}`;
@@ -195,7 +195,7 @@ async function installBindingsForVSCodeTerminal(editor: 'VSCode' | 'Cursor' | 'W
   // Check if we're running in a VSCode Remote SSH session
   // In this case, keybindings need to be installed on the LOCAL machine
   if (isVSCodeRemoteSSH()) {
-    return `${color('warning', theme)(`Cannot install keybindings from a remote ${editor} session.`)}${EOL}${EOL}${editor} keybindings must be installed on your local machine, not the remote server.${EOL}${EOL}To install the Shift+Enter keybinding:${EOL}1. Open ${editor} on your local machine (not connected to remote)${EOL}2. Open the Command Palette (Cmd/Ctrl+Shift+P) â†’ "Preferences: Open Keyboard Shortcuts (JSON)"${EOL}3. Add this keybinding (the file must be a JSON array):${EOL}${EOL}${chalk.dim(`[
+    return `${color('warning', theme)(`Cannot install keybindings from a remote ${editor} session.`)}${EOL}${EOL}${editor} keybindings must be installed on your local machine, not the remote server.${EOL}${EOL}To install the Shift+Enter keybinding:${EOL}1. Open ${editor} on your local machine (not connected to remote)${EOL}2. Open the Command Palette (Cmd/Ctrl+Shift+P) â†?"Preferences: Open Keyboard Shortcuts (JSON)"${EOL}3. Add this keybinding (the file must be a JSON array):${EOL}${EOL}${chalk.dim(`[
   {
     "key": "shift+enter",
     "command": "workbench.action.terminal.sendSequence",
@@ -409,7 +409,7 @@ chars = "\\u001B\\r"`;
       break;
     } catch (e: unknown) {
       if (!isFsInaccessible(e)) throw e;
-      // File missing or inaccessible â€” try next config path
+      // File missing or inaccessible â€?try next config path
     }
   }
 

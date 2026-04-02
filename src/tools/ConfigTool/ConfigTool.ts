@@ -145,7 +145,7 @@ export const ConfigTool = buildTool({
 
     // 3. SET operation
 
-    // Handle "default" â€” unset the config key so it falls back to the
+    // Handle "default" â€?unset the config key so it falls back to the
     // platform-aware default (determined by the bridge feature gate).
     if (
       setting === 'remoteControlAtStartup' &&
@@ -243,7 +243,7 @@ export const ConfigTool = buildTool({
           data: {
             success: false,
             error: !isAnthropicAuthEnabled()
-              ? 'Voice mode requires a Claude.ai account. Please run /login to sign in.'
+              ? 'Voice mode requires a Point account. Please run /login to sign in.'
               : 'Voice mode is not available.',
           },
         }
@@ -273,7 +273,7 @@ export const ConfigTool = buildTool({
           data: {
             success: false,
             error:
-              'Voice mode requires a Claude.ai account. Please run /login to sign in.',
+              'Voice mode requires a Point account. Please run /login to sign in.',
           },
         }
       }

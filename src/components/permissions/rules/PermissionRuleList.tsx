@@ -1098,7 +1098,7 @@ export function PermissionRuleList(t0) {
   }
   let t28;
   if ($[89] === Symbol.for("react.memo_cache_sentinel")) {
-    t28 = <Text>Claude Code can read files in the workspace, and make edits when auto-accept edits is on.</Text>;
+    t28 = <Text>PointCode can read files in the workspace, and make edits when auto-accept edits is on.</Text>;
     $[89] = t28;
   } else {
     t28 = $[89];
@@ -1128,7 +1128,7 @@ export function PermissionRuleList(t0) {
   }
   let t31;
   if ($[101] !== defaultTab || $[102] !== exitState.keyName || $[103] !== exitState.pending || $[104] !== headerFocused || $[105] !== isSearchMode) {
-    t31 = <Box marginTop={1} paddingLeft={1}><Text dimColor={true}>{exitState.pending ? <>Press {exitState.keyName} again to exit</> : headerFocused ? <>←/→ tab switch · ↓ return · Esc cancel</> : isSearchMode ? <>Type to filter · Enter/↓ select · ↑ tabs · Esc clear</> : hasDenials && defaultTab === "recent" ? <>Enter approve · r retry · ↑↓ navigate · ←/→ switch · Esc cancel</> : <>↑↓ navigate · Enter select · Type to search · ←/→ switch · Esc cancel</>}</Text></Box>;
+    t31 = <Box marginTop={1} paddingLeft={1}><Text dimColor={true}>{exitState.pending ? <>Press {exitState.keyName} again to exit</> : headerFocused ? <>�?�?tab switch · �?return · Esc cancel</> : isSearchMode ? <>Type to filter · Enter/�?select · �?tabs · Esc clear</> : hasDenials && defaultTab === "recent" ? <>Enter approve · r retry · ↑↓ navigate · �?�?switch · Esc cancel</> : <>↑↓ navigate · Enter select · Type to search · �?�?switch · Esc cancel</>}</Text></Box>;
     $[101] = defaultTab;
     $[102] = exitState.keyName;
     $[103] = exitState.pending;

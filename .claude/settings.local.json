@@ -9,7 +9,10 @@
       "Bash(bun run:*)",
       "Bash(GIT_TRACE=1 git push --set-upstream origin main --force)",
       "Bash(curl:*)",
-      "Bash(npm whoami:*)"
+      "Bash(npm whoami:*)",
+      "Bash(npm profile:*)",
+      "Bash(start:*)",
+      "Bash(npm publish:*)"
     ]
   }
 }

@@ -152,7 +152,7 @@ export function ApiKeyStep(t0) {
   }
   let t11;
   if ($[27] !== existingApiKey || $[28] !== selectedOption || $[29] !== theme) {
-    t11 = existingApiKey && <Box marginBottom={1}><Text>{selectedOption === "existing" ? color("success", theme)("> ") : "  "}Use your existing Claude Code API key</Text></Box>;
+    t11 = existingApiKey && <Box marginBottom={1}><Text>{selectedOption === "existing" ? color("success", theme)("> ") : "  "}Use your existing PointCode API key</Text></Box>;
     $[27] = existingApiKey;
     $[28] = selectedOption;
     $[29] = theme;
@@ -213,7 +213,7 @@ export function ApiKeyStep(t0) {
   }
   let t17;
   if ($[52] === Symbol.for("react.memo_cache_sentinel")) {
-    t17 = <Box marginLeft={3}><Text dimColor={true}>↑/↓ to select · Enter to continue</Text></Box>;
+    t17 = <Box marginLeft={3}><Text dimColor={true}>�?�?to select · Enter to continue</Text></Box>;
     $[52] = t17;
   } else {
     t17 = $[52];

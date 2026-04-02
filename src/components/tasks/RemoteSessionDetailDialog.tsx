@@ -44,7 +44,7 @@ type Props = {
 export function formatToolUseSummary(name: string, input: unknown): string {
   // plan_ready phase is only reached via ExitPlanMode tool
   if (name === EXIT_PLAN_MODE_V2_TOOL_NAME) {
-    return 'Review the plan in Claude Code on the web';
+    return 'Review the plan in PointCode on the web';
   }
   if (!input || typeof input !== 'object') return name;
   // AskUserQuestion: show the question text as a CTA, not the tool name.
@@ -168,7 +168,7 @@ function UltraplanSessionDetail(t0) {
     }
     let t7;
     if ($[12] === Symbol.for("react.memo_cache_sentinel")) {
-      t7 = <Text dimColor={true}>This will terminate the Claude Code on the web session.</Text>;
+      t7 = <Text dimColor={true}>This will terminate the PointCode on the web session.</Text>;
       $[12] = t7;
     } else {
       t7 = $[12];
@@ -311,7 +311,7 @@ function UltraplanSessionDetail(t0) {
   let t19;
   if ($[47] === Symbol.for("react.memo_cache_sentinel")) {
     t19 = {
-      label: "Review in Claude Code on the web",
+      label: "Review in PointCode on the web",
       value: "open" as const
     };
     $[47] = t19;
@@ -416,8 +416,8 @@ const STAGE_LABELS: Record<(typeof STAGES)[number], string> = {
   synthesizing: 'Dedupe'
 };
 
-// Setup â†’ Find â†’ Verify â†’ Dedupe pipeline. Current stage in cloud teal,
-// rest dim. When completed, all stages dim with a trailing green âœ“. The
+// Setup â†?Find â†?Verify â†?Dedupe pipeline. Current stage in cloud teal,
+// rest dim. When completed, all stages dim with a trailing green âœ? The
 // "Setup" label shows before the orchestrator writes its first progress
 // snapshot (container boot + repo clone), so the 0-found display doesn't
 // look like a hung finder.
@@ -448,7 +448,7 @@ function StagePipeline(t0) {
   }
   let t3;
   if ($[4] === Symbol.for("react.memo_cache_sentinel")) {
-    t3 = <Text dimColor={true}> â†’ </Text>;
+    t3 = <Text dimColor={true}> â†?</Text>;
     $[4] = t3;
   } else {
     t3 = $[4];
@@ -457,7 +457,7 @@ function StagePipeline(t0) {
   if ($[5] !== completed || $[6] !== currentIdx || $[7] !== inSetup) {
     t4 = STAGES.map((s, i) => {
       const isCurrent = !completed && !inSetup && i === currentIdx;
-      return <React.Fragment key={s}>{i > 0 && <Text dimColor={true}> â†’ </Text>}{isCurrent ? <Text color="background">{STAGE_LABELS[s]}</Text> : <Text dimColor={true}>{STAGE_LABELS[s]}</Text>}</React.Fragment>;
+      return <React.Fragment key={s}>{i > 0 && <Text dimColor={true}> â†?</Text>}{isCurrent ? <Text color="background">{STAGE_LABELS[s]}</Text> : <Text dimColor={true}>{STAGE_LABELS[s]}</Text>}</React.Fragment>;
     });
     $[5] = completed;
     $[6] = currentIdx;
@@ -468,7 +468,7 @@ function StagePipeline(t0) {
   }
   let t5;
   if ($[9] !== completed) {
-    t5 = completed && <Text color="success"> âœ“</Text>;
+    t5 = completed && <Text color="success"> done</Text>;
     $[9] = completed;
     $[10] = t5;
   } else {
@@ -492,7 +492,7 @@ function StagePipeline(t0) {
 // drift; completed state is dialog-specific (findings summary).
 function reviewCountsLine(session: DeepImmutable<RemoteAgentTaskState>): string {
   const p = session.reviewProgress;
-  // No progress data â€” the orchestrator never wrote a snapshot. Don't
+  // No progress data: the orchestrator never wrote a snapshot. Don't
   // claim "0 findings" when completed; we just don't know.
   if (!p) return session.status === 'completed' ? 'done' : 'setting up';
   const verified = p.bugsVerified;
@@ -595,13 +595,13 @@ function ReviewSessionDetail(t0) {
   let t3;
   if ($[11] !== completed || $[12] !== onKill || $[13] !== running) {
     t3 = completed ? [{
-      label: "Open in Claude Code on the web",
+      label: "Open in PointCode on the web",
       value: "open"
     }, {
       label: "Dismiss",
       value: "dismiss"
     }] : [{
-      label: "Open in Claude Code on the web",
+      label: "Open in PointCode on the web",
       value: "open"
     }, ...(onKill && running ? [{
       label: "Stop ultrareview",
@@ -789,7 +789,7 @@ export function RemoteSessionDetailDialog({
   // Scan all messages (not just the last 3 raw entries) because the tail of
   // the log is often thinking-only blocks that normalise to 'progress' type.
   // Placed before the early returns so hook call order is stable (Rules of Hooks).
-  // Ultraplan/review sessions never read this â€” skip the normalize work for them.
+  // Ultraplan/review sessions never read this â€?skip the normalize work for them.
   const lastMessages = useMemo(() => {
     if (session.isUltraplan || session.isRemoteReview) return [];
     return normalizeMessages(toInternalMessages(session.log as SDKMessage[])).filter(_ => _.type !== 'progress').slice(-3);
@@ -847,7 +847,7 @@ export function RemoteSessionDetailDialog({
   const displayStatus = session.status === 'pending' ? 'starting' : session.status;
   return <Box flexDirection="column" tabIndex={0} autoFocus onKeyDown={handleKeyDown}>
       <Dialog title="Remote session details" onCancel={handleClose} color="background" inputGuide={exitState => exitState.pending ? <Text>Press {exitState.keyName} again to exit</Text> : <Byline>
-              {onBack && <KeyboardShortcutHint shortcut="â†" action="go back" />}
+              {onBack && <KeyboardShortcutHint shortcut="?" action="go back" />}
               <KeyboardShortcutHint shortcut="Esc/Enter/Space" action="close" />
               {!isTeleporting && <KeyboardShortcutHint shortcut="t" action="teleport" />}
             </Byline>}>
@@ -897,7 +897,7 @@ export function RemoteSessionDetailDialog({
           </Box>}
 
         {/* Teleporting status */}
-        {isTeleporting && <Text color="background">Teleporting to sessionâ€¦</Text>}
+        {isTeleporting && <Text color="background">Teleporting to session...</Text>}
       </Dialog>
     </Box>;
 }

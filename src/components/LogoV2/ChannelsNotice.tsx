@@ -1,6 +1,6 @@
 import { c as _c } from "react-compiler-runtime";
 // Conditionally require()'d in LogoV2.tsx behind feature('KAIROS') ||
-// feature('KAIROS_CHANNELS'). No feature() guard here â€” the whole file
+// feature('KAIROS_CHANNELS'). No feature() guard here â€?the whole file
 // tree-shakes via the require pattern when both flags are false (see
 // docs/feature-gating.md). Do NOT import this module statically from
 // unguarded code.
@@ -135,7 +135,7 @@ export function ChannelsNotice() {
   }
   let t2;
   if ($[24] !== flag) {
-    t2 = <Text dimColor={true}>Experimental Â· inbound messages will be pushed into this session, this carries prompt injection risks. Restart Claude Code without {flag} to disable.</Text>;
+    t2 = <Text dimColor={true}>Experimental Â· inbound messages will be pushed into this session, this carries prompt injection risks. Restart PointCode without {flag} to disable.</Text>;
     $[24] = flag;
     $[25] = t2;
   } else {
@@ -222,14 +222,14 @@ function findUnmatched(entries: readonly ChannelEntry[], allowlist: ReturnType<t
   // Plugin-kind allowlist check: same {marketplace, plugin} test as the
   // gate at channelNotification.ts. entry.dev bypasses (dev flag opts out
   // of the allowlist). Org list replaces ledger when set (team/enterprise).
-  // GrowthBook _CACHED_MAY_BE_STALE â€” cold cache yields [] so every plugin
+  // GrowthBook _CACHED_MAY_BE_STALE â€?cold cache yields [] so every plugin
   // entry warns; same tradeoff the gate already accepts.
   const {
     entries: allowed,
     source
   } = allowlist;
 
-  // Independent ifs â€” a plugin entry that's both uninstalled AND
+  // Independent ifs â€?a plugin entry that's both uninstalled AND
   // unlisted shows two lines. Server kind checks config + dev flag.
   const out: Unmatched[] = [];
   for (const entry of entries) {

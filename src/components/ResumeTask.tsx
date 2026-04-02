@@ -119,17 +119,17 @@ export function ResumeTask({
     return <Box flexDirection="column" padding={1}>
         <Box flexDirection="row">
           <Spinner />
-          <Text bold>Loading Claude Code sessions…</Text>
+          <Text bold>Loading PointCode sessions...</Text>
         </Box>
         <Text dimColor>
-          {retrying ? 'Retrying…' : 'Fetching your Claude Code sessions…'}
+          {retrying ? 'Retrying...' : 'Fetching your PointCode sessions...'}
         </Text>
       </Box>;
   }
   if (loadErrorType) {
     return <Box flexDirection="column" padding={1}>
         <Text bold color="error">
-          Error loading Claude Code sessions
+          Error loading PointCode sessions
         </Text>
 
         {renderErrorSpecificGuidance(loadErrorType)}
@@ -143,7 +143,7 @@ export function ResumeTask({
   if (sessions.length === 0) {
     return <Box flexDirection="column" padding={1}>
         <Text bold>
-          No Claude Code sessions found
+          No PointCode sessions found
           {currentRepo && <Text> for {currentRepo}</Text>}
         </Text>
         <Box marginTop={1}>
@@ -212,7 +212,7 @@ export function ResumeTask({
       <Box flexDirection="row">
         <Text dimColor>
           <Byline>
-            <KeyboardShortcutHint shortcut="↑/↓" action="select" />
+            <KeyboardShortcutHint shortcut="??" action="select" />
             <KeyboardShortcutHint shortcut="Enter" action="confirm" />
             <ConfigurableShortcutHint action="confirm:no" context="Confirmation" fallback="Esc" description="cancel" />
           </Byline>
@@ -261,7 +261,7 @@ function renderErrorSpecificGuidance(errorType: LoadErrorType): React.ReactNode 
         </Box>;
     case 'other':
       return <Box marginY={1} flexDirection="row">
-          <Text dimColor>Sorry, Claude Code encountered an error</Text>
+          <Text dimColor>Sorry, PointCode encountered an error</Text>
         </Box>;
   }
 }

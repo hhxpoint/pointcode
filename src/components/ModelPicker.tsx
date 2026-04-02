@@ -265,7 +265,7 @@ export function ModelPicker(t0) {
   } else {
     t15 = $[41];
   }
-  const t16 = headerText ?? "Switch between Claude models. Applies to this session and future Claude Code sessions. For other/previous model names, specify with --model.";
+  const t16 = headerText ?? "Switch between Claude models. Applies to this session and future PointCode sessions. For other/previous model names, specify with --model.";
   let t17;
   if ($[42] !== t16) {
     t17 = <Text dimColor={true}>{t16}</Text>;
@@ -308,7 +308,7 @@ export function ModelPicker(t0) {
   }
   let t22;
   if ($[57] !== hiddenCount) {
-    t22 = hiddenCount > 0 && <Box paddingLeft={3}><Text dimColor={true}>and {hiddenCount} more‚Ä¶</Text></Box>;
+    t22 = hiddenCount > 0 && <Box paddingLeft={3}><Text dimColor={true}>and {hiddenCount} more...</Text></Box>;
     $[57] = hiddenCount;
     $[58] = t22;
   } else {
@@ -325,7 +325,7 @@ export function ModelPicker(t0) {
   }
   let t24;
   if ($[62] !== displayEffort || $[63] !== focusedDefaultEffort || $[64] !== focusedModelName || $[65] !== focusedSupportsEffort) {
-    t24 = <Box marginBottom={1} flexDirection="column">{focusedSupportsEffort ? <Text dimColor={true}><EffortLevelIndicator effort={displayEffort} />{" "}{capitalize(displayEffort)} effort{displayEffort === focusedDefaultEffort ? " (default)" : ""}{" "}<Text color="subtle">‚Üê ‚Üí to adjust</Text></Text> : <Text color="subtle"><EffortLevelIndicator effort={undefined} /> Effort not supported{focusedModelName ? ` for ${focusedModelName}` : ""}</Text>}</Box>;
+    t24 = <Box marginBottom={1} flexDirection="column">{focusedSupportsEffort ? <Text dimColor={true}><EffortLevelIndicator effort={displayEffort} />{" "}{capitalize(displayEffort)} effort{displayEffort === focusedDefaultEffort ? " (default)" : ""}{" "}<Text color="subtle">‚Ü?‚Ü?to adjust</Text></Text> : <Text color="subtle"><EffortLevelIndicator effort={undefined} /> Effort not supported{focusedModelName ? ` for ${focusedModelName}` : ""}</Text>}</Box>;
     $[62] = displayEffort;
     $[63] = focusedDefaultEffort;
     $[64] = focusedModelName;

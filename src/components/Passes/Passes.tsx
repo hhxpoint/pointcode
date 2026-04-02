@@ -109,7 +109,7 @@ export function Passes({
   if (loading) {
     return <Pane>
         <Box flexDirection="column" gap={1}>
-          <Text dimColor>Loading guest pass information…</Text>
+          <Text dimColor>Loading guest pass information...</Text>
           <Text dimColor italic>
             {exitState.pending ? <>Press {exitState.keyName} again to exit</> : <>Esc to cancel</>}
           </Text>
@@ -137,19 +137,19 @@ export function Passes({
     if (isRedeemed) {
       // Grayed out redeemed ticket with slashes
       return <Box key={pass.passNumber} flexDirection="column" marginRight={1}>
-          <Text dimColor>{'┌─────────╱'}</Text>
-          <Text dimColor>{` ) CC ${TEARDROP_ASTERISK} ┊╱`}</Text>
-          <Text dimColor>{'└───────╱'}</Text>
+          <Text dimColor>{'+---------+'}</Text>
+          <Text dimColor>{`| CC ${TEARDROP_ASTERISK} /|`}</Text>
+          <Text dimColor>{'+-------+-+'}</Text>
         </Box>;
     }
     return <Box key={pass.passNumber} flexDirection="column" marginRight={1}>
-        <Text>{'┌──────────┐'}</Text>
+        <Text>{'+----------+'}</Text>
         <Text>
           {' ) CC '}
           <Text color="claude">{TEARDROP_ASTERISK}</Text>
-          {' ┊ ( '}
+          {' ) ( '}
         </Text>
-        <Text>{'└──────────┘'}</Text>
+        <Text>{'+----------+'}</Text>
       </Box>;
   };
   return <Pane>
@@ -166,7 +166,7 @@ export function Passes({
 
         <Box flexDirection="column" marginLeft={2}>
           <Text dimColor>
-            {referrerReward ? `Share a free week of Claude Code with friends. If they love it and subscribe, you'll get ${formatCreditAmount(referrerReward)} of extra usage to keep building. ` : 'Share a free week of Claude Code with friends. '}
+            {referrerReward ? `Share a free week of PointCode with friends. If they love it and subscribe, you'll get ${formatCreditAmount(referrerReward)} of extra usage to keep building. ` : 'Share a free week of PointCode with friends. '}
             <Link url={referrerReward ? 'https://support.claude.com/en/articles/13456702-claude-code-guest-passes' : 'https://support.claude.com/en/articles/12875061-claude-code-guest-passes'}>
               Terms apply.
             </Link>

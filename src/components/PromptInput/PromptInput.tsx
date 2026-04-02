@@ -150,7 +150,7 @@ type Props = {
   } | undefined) => void;
   submitCount: number;
   onShowMessageSelector: () => void;
-  /** Fullscreen message actions: shift+â†‘ enters cursor. */
+  /** Fullscreen message actions: shift+â†?enters cursor. */
   onMessageActionsEnter?: () => void;
   mcpClients: MCPServerConnection[];
   pastedContents: Record<number, PastedContent>;
@@ -254,7 +254,7 @@ function PromptInput({
   // external input changes (e.g. speech-to-text injection) and move cursor to end.
   const lastInternalInputRef = React.useRef(input);
   if (input !== lastInternalInputRef.current) {
-    // Input changed externally (not through any internal handler) â€” move cursor to end
+    // Input changed externally (not through any internal handler) â€?move cursor to end
     setCursorOffset(input.length);
     lastInternalInputRef.current = input;
   }
@@ -289,14 +289,13 @@ function PromptInput({
   const replBridgeConnected = useAppState(s => s.replBridgeConnected);
   const replBridgeExplicit = useAppState(s => s.replBridgeExplicit);
   const replBridgeReconnecting = useAppState(s => s.replBridgeReconnecting);
-  // Must match BridgeStatusIndicator's render condition (PromptInputFooter.tsx) â€”
-  // the pill returns null for implicit-and-not-reconnecting, so nav must too,
+  // Must match BridgeStatusIndicator's render condition (PromptInputFooter.tsx) â€?  // the pill returns null for implicit-and-not-reconnecting, so nav must too,
   // otherwise bridge becomes an invisible selection stop.
   const bridgeFooterVisible = replBridgeConnected && (replBridgeExplicit || replBridgeReconnecting);
-  // Tmux pill (ant-only) â€” visible when there's an active tungsten session
+  // Tmux pill (ant-only) â€?visible when there's an active tungsten session
   const hasTungstenSession = useAppState(s => "external" === 'ant' && s.tungstenActiveSession !== undefined);
   const tmuxFooterVisible = "external" === 'ant' && hasTungstenSession;
-  // WebBrowser pill â€” visible when a browser is open
+  // WebBrowser pill â€?visible when a browser is open
   const bagelFooterVisible = useAppState(s => false);
   const teamContext = useAppState(s => s.teamContext);
   const queuedCommands = useCommandQueue();
@@ -317,7 +316,7 @@ function PromptInput({
   // Brief mode: BriefSpinner/BriefIdleStatus own the 2-row footprint above
   // the input. Dropping marginTop here lets the spinner sit flush against
   // the input bar. viewingAgentTaskId mirrors the gate on both (Spinner.tsx,
-  // REPL.tsx) â€” teammate view falls back to SpinnerWithVerbInner which has
+  // REPL.tsx) â€?teammate view falls back to SpinnerWithVerbInner which has
   // its own marginTop, so the gap stays even without ours.
   const briefOwnsGap = feature('KAIROS') || feature('KAIROS_BRIEF') ?
   // biome-ignore lint/correctness/useHookAtTopLevel: feature() is a compile-time constant
@@ -361,7 +360,7 @@ function PromptInput({
   // Counter for paste IDs (shared between images and text).
   // Compute initial value once from existing messages (for --continue/--resume).
   // useRef(fn()) evaluates fn() on every render and discards the result after
-  // mount â€” getInitialPasteId walks all messages + regex-scans text blocks,
+  // mount â€?getInitialPasteId walks all messages + regex-scans text blocks,
   // so guard with a lazy-init pattern to run it exactly once.
   const nextPasteIdRef = useRef(-1);
   if (nextPasteIdRef.current === -1) {
@@ -375,7 +374,7 @@ function PromptInput({
   const [showBridgeDialog, setShowBridgeDialog] = useState(false);
   const [teammateFooterIndex, setTeammateFooterIndex] = useState(0);
   // -1 sentinel: tasks pill is selected but no specific agent row is selected yet.
-  // First â†“ selects the pill, second â†“ moves to row 0. Prevents double-select
+  // First â†?selects the pill, second â†?moves to row 0. Prevents double-select
   // of pill + row when both bg tasks (pill) and forked agents (rows) are visible.
   const coordinatorTaskIndex = useAppState(s => s.coordinatorTaskIndex);
   const setCoordinatorTaskIndex = useCallback((v: number | ((prev: number) => number)) => setAppState(prev => {
@@ -453,7 +452,7 @@ function PromptInput({
   // pills rendered outside PromptInput (CompanionSprite) can read focus.
   const runningTaskCount = useMemo(() => count(Object.values(tasks), t => t.status === 'running'), [tasks]);
   // Panel shows retained-completed agents too (getVisibleAgentTasks), so the
-  // pill must stay navigable whenever the panel has rows â€” not just when
+  // pill must stay navigable whenever the panel has rows â€?not just when
   // something is running.
   const tasksFooterVisible = (runningTaskCount > 0 || "external" === 'ant' && coordinatorTaskCount > 0) && !shouldHideTasksFooter(tasks, showSpinnerTree);
   const teamsFooterVisible = cachedTeams.length > 0;
@@ -462,7 +461,7 @@ function PromptInput({
   // Effective selection: null if the selected pill stopped rendering (bridge
   // disconnected, task finished). The derivation makes the UI correct
   // immediately; the useEffect below clears the raw state so it doesn't
-  // resurrect when the same pill reappears (new task starts â†’ focus stolen).
+  // resurrect when the same pill reappears (new task starts â†?focus stolen).
   const rawFooterSelection = useAppState(s => s.footerSelection);
   const footerItemSelected = rawFooterSelection && footerItems.includes(rawFooterSelection) ? rawFooterSelection : null;
   useEffect(() => {
@@ -761,7 +760,7 @@ function PromptInput({
     if (feature('ULTRAPLAN') && ultraplanTriggers.length) {
       addNotification({
         key: 'ultraplan-active',
-        text: 'This prompt will launch an ultraplan session in Claude Code on the web',
+        text: 'This prompt will launch an ultraplan session in PointCode on the web',
         priority: 'immediate',
         timeoutMs: 5000
       });
@@ -919,8 +918,8 @@ function PromptInput({
   }, [isSearchingHistory, dismissSearchHint]);
 
   // Only use history navigation when there are 0 or 1 slash command suggestions.
-  // Footer nav is NOT here â€” when a pill is selected, TextInput focus=false so
-  // these never fire. The Footer keybinding context handles â†‘/â†“ instead.
+  // Footer nav is NOT here â€?when a pill is selected, TextInput focus=false so
+  // these never fire. The Footer keybinding context handles â†?â†?instead.
   function handleHistoryUp() {
     if (suggestions.length > 1) {
       return;
@@ -953,7 +952,7 @@ function PromptInput({
       return;
     }
 
-    // At bottom of history â†’ enter footer at first visible pill
+    // At bottom of history â†?enter footer at first visible pill
     if (onHistoryDown() && footerItems.length > 0) {
       const first = footerItems[0]!;
       selectFooterItem(first);
@@ -985,7 +984,7 @@ function PromptInput({
     inputParam = inputParam.trimEnd();
 
     // Don't submit if a footer indicator is being opened. Read fresh from
-    // store â€” footer:openSelected calls selectFooterItem(null) then onSubmit
+    // store â€?footer:openSelected calls selectFooterItem(null) then onSubmit
     // in the same tick, and the closure value hasn't updated yet. Apply the
     // same "still visible?" derivation as footerItemSelected so a stale
     // selection (pill disappeared) doesn't swallow Enter.
@@ -1007,7 +1006,7 @@ function PromptInput({
     // If input is empty OR matches the suggestion, submit it
     // But if there are images attached, don't auto-accept the suggestion -
     // the user wants to submit just the image(s).
-    // Only in leader view â€” promptSuggestion is leader-context, not teammate.
+    // Only in leader view â€?promptSuggestion is leader-context, not teammate.
     const suggestionText = promptSuggestionState.text;
     const inputMatchesSuggestion = inputParam.trim() === '' || inputParam === suggestionText;
     if (inputMatchesSuggestion && suggestionText && !hasImages && !state.viewingAgentTaskId) {
@@ -1126,15 +1125,14 @@ function PromptInput({
   });
 
   // Track if prompt suggestion should be shown (computed later with terminal width).
-  // Hidden in teammate view â€” suggestion is leader-context only.
+  // Hidden in teammate view â€?suggestion is leader-context only.
   const showPromptSuggestion = mode === 'prompt' && suggestions.length === 0 && promptSuggestion && !viewingAgentTaskId;
   if (showPromptSuggestion) {
     markShown();
   }
 
   // If suggestion was generated but can't be shown due to timing, log suppression.
-  // Exclude teammate view: markShown() is gated above, so shownAt stays 0 there â€”
-  // but that's not a timing failure, the suggestion is valid when returning to leader.
+  // Exclude teammate view: markShown() is gated above, so shownAt stays 0 there â€?  // but that's not a timing failure, the suggestion is valid when returning to leader.
   if (promptSuggestionState.text && !promptSuggestion && promptSuggestionState.shownAt === 0 && !viewingAgentTaskId) {
     logSuggestionSuppressed('timing', promptSuggestionState.text);
     setAppState(prev => ({
@@ -1183,7 +1181,7 @@ function PromptInput({
   }
 
   // Prune images whose [Image #N] placeholder is no longer in the input text.
-  // Covers pill backspace, Ctrl+U, char-by-char deletion â€” any edit that drops
+  // Covers pill backspace, Ctrl+U, char-by-char deletion â€?any edit that drops
   // the ref. onImagePaste batches setPastedContents + insertTextAtCursor in the
   // same event, so this effect sees the placeholder already present.
   useEffect(() => {
@@ -1452,7 +1450,7 @@ function PromptInput({
     // Check if user is entering auto mode for the first time. Gated on the
     // persistent settings flag (hasAutoModeOptIn) rather than the broader
     // hasAutoModeOptInAnySource so that --enable-auto-mode users still see
-    // the warning dialog once â€” the CLI flag should grant carousel access,
+    // the warning dialog once â€?the CLI flag should grant carousel access,
     // not bypass the safety text.
     let isEnteringAutoModeFirstTime = false;
     if (feature('TRANSCRIPT_CLASSIFIER')) {
@@ -1463,7 +1461,7 @@ function PromptInput({
         // Store previous mode so we can revert if user declines
         setPreviousModeBeforeAuto(toolPermissionContext.mode);
 
-        // Only update the UI mode label â€” do NOT call transitionPermissionMode
+        // Only update the UI mode label â€?do NOT call transitionPermissionMode
         // or cyclePermissionMode yet; we haven't confirmed with the user.
         setAppState(prev => ({
           ...prev,
@@ -1493,7 +1491,7 @@ function PromptInput({
     }
 
     // Dismiss auto mode opt-in dialog if showing or pending (user is cycling away).
-    // Do NOT revert to previousModeBeforeAuto here â€” shift+tab means "advance the
+    // Do NOT revert to previousModeBeforeAuto here â€?shift+tab means "advance the
     // carousel", not "decline". Reverting causes a ping-pong loop: auto reverts to
     // the prior mode, whose next mode is auto again, forever.
     // The dialog's own decline button (handleAutoModeOptInDecline) handles revert.
@@ -1508,7 +1506,7 @@ function PromptInput({
           autoModeOptInTimeoutRef.current = null;
         }
         setPreviousModeBeforeAuto(null);
-        // Fall through â€” mode is 'auto', cyclePermissionMode below goes to 'default'.
+        // Fall through â€?mode is 'auto', cyclePermissionMode below goes to 'default'.
       }
     }
 
@@ -1672,7 +1670,7 @@ function PromptInput({
     isActive: !isModalOverlayActive
   });
 
-  // Shift+â†‘ enters message-actions cursor. Separate isActive so ctrl+r search
+  // Shift+â†?enters message-actions cursor. Separate isActive so ctrl+r search
   // doesn't leave stale isSearchingHistory on cursor-exit remount.
   useKeybinding('chat:messageActions', () => onMessageActionsEnter?.(), {
     context: 'Chat',
@@ -1736,12 +1734,12 @@ function PromptInput({
     isActive: !isLoading && speculation.status === 'active'
   });
 
-  // Footer indicator navigation keybindings. â†‘/â†“ live here (not in
+  // Footer indicator navigation keybindings. â†?â†?live here (not in
   // handleHistoryUp/Down) because TextInput focus=false when a pill is
-  // selected â€” its useInput is inactive, so this is the only path.
+  // selected â€?its useInput is inactive, so this is the only path.
   useKeybindings({
     'footer:up': () => {
-      // â†‘ scrolls within the coordinator task list before leaving the pill
+      // â†?scrolls within the coordinator task list before leaving the pill
       if (tasksSelected && "external" === 'ant' && coordinatorTaskCount > 0 && coordinatorTaskIndex > minCoordinatorIndex) {
         setCoordinatorTaskIndex(prev => prev - 1);
         return;
@@ -1749,7 +1747,7 @@ function PromptInput({
       navigateFooter(-1, true);
     },
     'footer:down': () => {
-      // â†“ scrolls within the coordinator task list, never leaves the pill
+      // â†?scrolls within the coordinator task list, never leaves the pill
       if (tasksSelected && "external" === 'ant' && coordinatorTaskCount > 0) {
         if (coordinatorTaskIndex < coordinatorTaskCount - 1) {
           setCoordinatorTaskIndex(prev => prev + 1);
@@ -1764,7 +1762,7 @@ function PromptInput({
       navigateFooter(1);
     },
     'footer:next': () => {
-      // Teammate mode: â†/â†’ cycles within the team member list
+      // Teammate mode: â†?â†?cycles within the team member list
       if (tasksSelected && isTeammateMode) {
         const totalAgents = 1 + inProcessTeammates.length;
         setTeammateFooterIndex(prev => (prev + 1) % totalAgents);
@@ -1843,7 +1841,7 @@ function PromptInput({
         const task = getVisibleAgentTasks(tasks)[coordinatorTaskIndex - 1];
         if (!task) return false;
         // When the selected row IS the viewed agent, 'x' types into the
-        // steering input. Any other row â€” dismiss it.
+        // steering input. Any other row â€?dismiss it.
         if (viewSelectionMode === 'viewing-agent' && task.id === viewingAgentTaskId) {
           onChange(input.slice(0, cursorOffset) + 'x' + input.slice(cursorOffset));
           setCursorOffset(cursorOffset + 1);
@@ -1855,7 +1853,7 @@ function PromptInput({
         }
         return;
       }
-      // Not handled â€” let 'x' fall through to type-to-exit
+      // Not handled â€?let 'x' fall through to type-to-exit
       return false;
     }
   }, {
@@ -1864,7 +1862,7 @@ function PromptInput({
   });
   useInput((char, key) => {
     // Skip all input handling when a full-screen dialog is open. These dialogs
-    // render via early return, but hooks run unconditionally â€” so without this
+    // render via early return, but hooks run unconditionally â€?so without this
     // guard, Escape inside a dialog leaks to the double-press message-selector.
     if (showTeamsDialog || showQuickOpen || showGlobalSearch || showHistoryPicker) {
       return;
@@ -1876,7 +1874,7 @@ function PromptInput({
       const terminalName = getNativeCSIuTerminalDisplayName();
       const jsx = terminalName ? <Text dimColor>
           To enable {shortcut}, set <Text bold>Option as Meta</Text> in{' '}
-          {terminalName} preferences (âŒ˜,)
+          {terminalName} preferences (âŒ?)
         </Text> : <Text dimColor>To enable {shortcut}, run /terminal-setup</Text>;
       addNotification({
         key: 'option-meta-hint',
@@ -1965,7 +1963,7 @@ function PromptInput({
   const showFastIconHint = useShowFastIconHint(showFastIcon ?? false);
 
   // Show effort notification on startup and when effort changes.
-  // Suppressed in brief/assistant mode â€” the value reflects the local
+  // Suppressed in brief/assistant mode â€?the value reflects the local
   // client's effort, not the connected agent's.
   const effortNotificationText = briefOwnsGap ? undefined : getEffortNotificationText(effortValue, mainLoopModel);
   useEffect(() => {
@@ -1999,7 +1997,7 @@ function PromptInput({
   const maxVisibleLines = isFullscreenEnvEnabled() ? Math.max(MIN_INPUT_VIEWPORT_LINES, Math.floor(rows / 2) - PROMPT_FOOTER_LINES) : undefined;
   const handleInputClick = useCallback((e: ClickEvent) => {
     // During history search the displayed text is historyMatch, not
-    // input, and showCursor is false anyway â€” skip rather than
+    // input, and showCursor is false anyway â€?skip rather than
     // compute an offset against the wrong string.
     if (!input || isSearchingHistory) return;
     const c = Cursor.fromText(input, textInputColumns, cursorOffset);
@@ -2244,7 +2242,7 @@ function PromptInput({
   return <Box flexDirection="column" marginTop={briefOwnsGap ? 0 : 1}>
       {!isFullscreenEnvEnabled() && <PromptInputQueuedCommands />}
       {hasSuppressedDialogs && <Box marginTop={1} marginLeft={2}>
-          <Text dimColor>Waiting for permissionâ€¦</Text>
+          <Text dimColor>Waiting for permission...</Text>
         </Box>}
       <PromptInputStashNotice hasStash={stashedPrompt !== undefined} />
       {swarmBanner ? <>
@@ -2280,12 +2278,12 @@ function PromptInput({
     // marginTop=-1 pulls it into the marginTop=1 gap row above the
     // prompt border. In brief mode there is no such gap (briefOwnsGap
     // strips our marginTop) and BriefSpinner sits flush against the
-    // border â€” marginTop=-2 skips over the spinner content into
+    // border â€?marginTop=-2 skips over the spinner content into
     // BriefSpinner's own marginTop=1 blank row. height=1 +
     // overflow=hidden clips multi-line notifications to a single row.
     // flex-end anchors the bottom line so the visible row is always
     // the most recent. Suppressed while the slash overlay or
-    // auto-mode opt-in dialog is up by height=0 (NOT unmount) â€” this
+    // auto-mode opt-in dialog is up by height=0 (NOT unmount) â€?this
     // Box renders later in tree order so it would paint over their
     // bottom row. Keeping Notifications mounted prevents AutoUpdater's
     // initial-check effect from re-firing on every slash-completion

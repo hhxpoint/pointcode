@@ -69,7 +69,7 @@ export async function playAnimation(skillDir: string): Promise<{
   // silently return success. Using readFile (not access) per CLAUDE.md.
   //
   // Non-ENOENT errors (EACCES etc) are logged and returned as failures rather
-  // than thrown — the old pathExists-based code never threw, and one caller
+  // than thrown �?the old pathExists-based code never threw, and one caller
   // (handleSelect) uses `void playAnimation().then(...)` without a .catch().
   try {
     await readFile(dataPath);
@@ -192,7 +192,7 @@ function ThinkbackInstaller({
           setState({
             phase: 'installing-marketplace'
           });
-          setProgressMessage('Updating marketplace…');
+          setProgressMessage('Updating marketplace...');
           logForDebugging(`Refreshing marketplace ${marketplaceName}`);
           await refreshMarketplace(marketplaceName, message_0 => {
             setProgressMessage(message_0);
@@ -258,7 +258,7 @@ function ThinkbackInstaller({
   if (state.phase === 'ready') {
     return null;
   }
-  const statusMessage = state.phase === 'checking' ? 'Checking thinkback installation…' : state.phase === 'installing-marketplace' ? 'Installing marketplace…' : state.phase === 'enabling-plugin' ? 'Enabling thinkback plugin…' : 'Installing thinkback plugin…';
+  const statusMessage = state.phase === 'checking' ? 'Checking thinkback installation...' : state.phase === 'installing-marketplace' ? 'Installing marketplace...' : state.phase === 'enabling-plugin' ? 'Enabling thinkback plugin...' : 'Installing thinkback plugin...';
   return <Box flexDirection="column">
       <Box>
         <Spinner />
@@ -372,7 +372,7 @@ function ThinkbackMenu(t0) {
   }
   let t7;
   if ($[16] !== handleCancel || $[17] !== t6) {
-    t7 = <Dialog title="Think Back on 2025 with Claude Code" subtitle="Generate your 2025 Claude Code Think Back (takes a few minutes to run)" onCancel={handleCancel} color="claude">{t6}</Dialog>;
+    t7 = <Dialog title="Think Back on 2025 with PointCode" subtitle="Generate your 2025 PointCode Think Back (takes a few minutes to run)" onCancel={handleCancel} color="claude">{t6}</Dialog>;
     $[16] = handleCancel;
     $[17] = t6;
     $[18] = t7;
@@ -381,9 +381,9 @@ function ThinkbackMenu(t0) {
   }
   return t7;
 }
-const EDIT_PROMPT = 'Use the Skill tool to invoke the "thinkback" skill with mode=edit to modify my existing Claude Code year in review animation. Ask me what I want to change. When the animation is ready, tell the user to run /think-back again to play it.';
-const FIX_PROMPT = 'Use the Skill tool to invoke the "thinkback" skill with mode=fix to fix validation or rendering errors in my existing Claude Code year in review animation. Run the validator, identify errors, and fix them. When the animation is ready, tell the user to run /think-back again to play it.';
-const REGENERATE_PROMPT = 'Use the Skill tool to invoke the "thinkback" skill with mode=regenerate to create a completely new Claude Code year in review animation from scratch. Delete the existing animation and start fresh. When the animation is ready, tell the user to run /think-back again to play it.';
+const EDIT_PROMPT = 'Use the Skill tool to invoke the "thinkback" skill with mode=edit to modify my existing PointCode year in review animation. Ask me what I want to change. When the animation is ready, tell the user to run /think-back again to play it.';
+const FIX_PROMPT = 'Use the Skill tool to invoke the "thinkback" skill with mode=fix to fix validation or rendering errors in my existing PointCode year in review animation. Run the validator, identify errors, and fix them. When the animation is ready, tell the user to run /think-back again to play it.';
+const REGENERATE_PROMPT = 'Use the Skill tool to invoke the "thinkback" skill with mode=regenerate to create a completely new PointCode year in review animation from scratch. Delete the existing animation and start fresh. When the animation is ready, tell the user to run /think-back again to play it.';
 function ThinkbackFlow(t0) {
   const $ = _c(27);
   const {
@@ -525,7 +525,7 @@ function ThinkbackFlow(t0) {
   if (!skillDir || hasGenerated === null) {
     let t8;
     if ($[21] === Symbol.for("react.memo_cache_sentinel")) {
-      t8 = <Box><Spinner /><Text>Loading thinkback skill…</Text></Box>;
+      t8 = <Box><Spinner /><Text>Loading thinkback skill...</Text></Box>;
       $[21] = t8;
     } else {
       t8 = $[21];

@@ -27,7 +27,7 @@ const isTextField = (s: PrimitiveSchemaDefinition) => ['string', 'number', 'inte
 const RESOLVING_SPINNER_CHARS = '\u280B\u2819\u2839\u2838\u283C\u2834\u2826\u2827\u2807\u280F';
 const advanceSpinnerFrame = (f: number) => (f + 1) % RESOLVING_SPINNER_CHARS.length;
 
-/** Timer callback for enumTypeaheadRef â€” module-scope to avoid closure capture. */
+/** Timer callback for enumTypeaheadRef â€?module-scope to avoid closure capture. */
 function resetTypeahead(ta: {
   buffer: string;
   timer: ReturnType<typeof setTimeout> | undefined;
@@ -251,10 +251,10 @@ function ElicitationFormDialog({
   const currentField = currentFieldIndex !== undefined ? schemaFields[currentFieldIndex] : undefined;
   const currentFieldIsText = currentField !== undefined && isTextField(currentField.schema) && !isEnumSchema(currentField.schema);
 
-  // Text fields are always in edit mode when focused â€” no Enter-to-edit step.
+  // Text fields are always in edit mode when focused â€?no Enter-to-edit step.
   const isEditingTextField = currentFieldIsText && !focusedButton;
   useRegisterOverlay('elicitation');
-  useNotifyAfterTimeout('Claude Code needs your input', 'elicitation_dialog');
+  useNotifyAfterTimeout('PointCode needs your input', 'elicitation_dialog');
 
   // Sync textInputValue when the focused field changes
   const syncTextInput = useCallback((fieldIndex: number | undefined) => {
@@ -299,7 +299,7 @@ function ElicitationFormDialog({
     if (isEditingTextField && currentField) {
       commitTextField(currentField.name, currentField.schema, textInputValue);
 
-      // Cancel any pending debounce â€” we're resolving now on navigate-away
+      // Cancel any pending debounce â€?we're resolving now on navigate-away
       if (dateDebounceRef.current !== undefined) {
         clearTimeout(dateDebounceRef.current);
         dateDebounceRef.current = undefined;
@@ -371,7 +371,7 @@ function ElicitationFormDialog({
       return;
     }
     if (trimmedValue === '') {
-      // Empty plain string â€” keep or unset depending on whether it was set
+      // Empty plain string â€?keep or unset depending on whether it was set
       if (formValues[fieldName_3] !== undefined) {
         setField(fieldName_3, '');
       }
@@ -676,7 +676,7 @@ function ElicitationFormDialog({
       return;
     }
 
-    // Enum or multi-select (collapsed) â€” accordion style
+    // Enum or multi-select (collapsed) â€?accordion style
     if (isEnumSchema(schema_5) || isMultiSelectEnumSchema(schema_5)) {
       if (key.return) {
         handleNavigation('down');
@@ -795,7 +795,7 @@ function ElicitationFormDialog({
         const hasValue = value_3 !== undefined && (!Array.isArray(value_3) || value_3.length > 0);
         const error_0 = validationErrors[name_1];
 
-        // Checkbox: spinner â†’ âš  error â†’ âœ” set â†’ * required â†’ space
+        // Checkbox: spinner â†?âš?error â†?âœ?set â†?* required â†?space
         const isResolving = resolvingFields.has(name_1);
         const checkbox = isResolving ? <ResolvingSpinner /> : error_0 ? <Text color="error">{figures.warning}</Text> : hasValue ? <Text color="success" dimColor={!isActive}>
                 {figures.tick}
@@ -836,7 +836,7 @@ function ElicitationFormDialog({
               })}
                   </Box>;
           } else {
-            // Collapsed: â–¸ arrow then comma-joined selected items
+            // Collapsed: â–?arrow then comma-joined selected items
             const arrow = isActive ? <Text dimColor>{figures.triangleRightSmall} </Text> : null;
             if (selected_1.length > 0) {
               const displayLabels = selected_1.map(v_4 => getMultiSelectLabel(schema_6, v_4));
@@ -879,7 +879,7 @@ function ElicitationFormDialog({
               })}
                   </Box>;
           } else {
-            // Collapsed: â–¸ arrow then current value
+            // Collapsed: â–?arrow then current value
             const arrow_0 = isActive ? <Text dimColor>{figures.triangleRightSmall} </Text> : null;
             if (hasValue) {
               valueContent = <Text>
@@ -959,8 +959,8 @@ function ElicitationFormDialog({
             <KeyboardShortcutHint shortcut="â†‘â†“" action="navigate" />
             {currentField && <KeyboardShortcutHint shortcut="Backspace" action="unset" />}
             {currentField && currentField.schema.type === 'boolean' && <KeyboardShortcutHint shortcut="Space" action="toggle" />}
-            {currentField && isEnumSchema(currentField.schema) && (expandedAccordion ? <KeyboardShortcutHint shortcut="Space" action="select" /> : <KeyboardShortcutHint shortcut="â†’" action="expand" />)}
-            {currentField && isMultiSelectEnumSchema(currentField.schema) && (expandedAccordion ? <KeyboardShortcutHint shortcut="Space" action="toggle" /> : <KeyboardShortcutHint shortcut="â†’" action="expand" />)}
+            {currentField && isEnumSchema(currentField.schema) && (expandedAccordion ? <KeyboardShortcutHint shortcut="Space" action="select" /> : <KeyboardShortcutHint shortcut="?" action="expand" />)}
+            {currentField && isMultiSelectEnumSchema(currentField.schema) && (expandedAccordion ? <KeyboardShortcutHint shortcut="Space" action="toggle" /> : <KeyboardShortcutHint shortcut="?" action="expand" />)}
           </Byline>}>
       <Box flexDirection="column">
         {renderFormFields()}
@@ -1004,7 +1004,7 @@ function ElicitationURLDialog({
   const phaseRef = useRef<'prompt' | 'waiting'>('prompt');
   const [focusedButton, setFocusedButton] = useState<'accept' | 'decline' | 'open' | 'action' | 'cancel'>('accept');
   const showCancel = waitingState?.showCancel ?? false;
-  useNotifyAfterTimeout('Claude Code needs your input', 'elicitation_url_dialog');
+  useNotifyAfterTimeout('PointCode needs your input', 'elicitation_url_dialog');
   useRegisterOverlay('elicitation-url');
 
   // Keep refs in sync for use in abort handler (avoids re-registering listener)
@@ -1070,7 +1070,7 @@ function ElicitationURLDialog({
         }
       }
     } else {
-      // waiting phase â€” cycle through buttons
+      // waiting phase â€?cycle through buttons
       type ButtonName = 'accept' | 'decline' | 'open' | 'action' | 'cancel';
       const waitingButtons: readonly ButtonName[] = showCancel ? ['open', 'action', 'cancel'] : ['open', 'action'];
       if (key.leftArrow || key.rightArrow) {
@@ -1108,8 +1108,7 @@ function ElicitationURLDialog({
           </Box>
           <Box marginBottom={1}>
             <Text dimColor italic>
-              Waiting for the server to confirm completionâ€¦
-            </Text>
+              Waiting for the server to confirm completionâ€?            </Text>
           </Box>
           <Box>
             <Text color="success">

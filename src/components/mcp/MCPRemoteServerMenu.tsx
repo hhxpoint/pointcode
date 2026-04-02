@@ -102,9 +102,9 @@ export function MCPRemoteServerMenu({
       if (success) {
         onComplete?.(`Authentication successful. Connected to ${server.name}.`);
       } else if (result.client.type === 'needs-auth') {
-        onComplete?.('Authentication successful, but server still requires authentication. You may need to manually restart Claude Code.');
+        onComplete?.('Authentication successful, but server still requires authentication. You may need to manually restart PointCode.');
       } else {
-        onComplete?.('Authentication successful, but server reconnection failed. You may need to manually restart Claude Code for the changes to take effect.');
+        onComplete?.('Authentication successful, but server reconnection failed. You may need to manually restart PointCode for the changes to take effect.');
       }
     } catch (err) {
       logEvent('tengu_claudeai_mcp_auth_completed', {
@@ -281,11 +281,11 @@ export function MCPRemoteServerMenu({
           const message = isEffectivelyAuthenticated ? `Authentication successful. Reconnected to ${server.name}.` : `Authentication successful. Connected to ${server.name}.`;
           onComplete?.(message);
         } else if (result_0.client.type === 'needs-auth') {
-          onComplete?.('Authentication successful, but server still requires authentication. You may need to manually restart Claude Code.');
+          onComplete?.('Authentication successful, but server still requires authentication. You may need to manually restart PointCode.');
         } else {
           // result.client.type === 'failed'
           logMCPDebug(server.name, `Reconnection failed after authentication`);
-          onComplete?.('Authentication successful, but server reconnection failed. You may need to manually restart Claude Code for the changes to take effect.');
+          onComplete?.('Authentication successful, but server reconnection failed. You may need to manually restart PointCode for the changes to take effect.');
         }
       }
     } catch (err_1) {
@@ -339,12 +339,12 @@ export function MCPRemoteServerMenu({
     }
   };
   if (isAuthenticating) {
-    // XAA: silent exchange (cached id_token → no browser), so don't claim
+    // XAA: silent exchange (cached id_token �?no browser), so don't claim
     // one will open. If IdP login IS needed, authorizationUrl populates and
     // the URL fallback block below still renders.
     const authCopy = server.config.type !== 'claudeai-proxy' && server.config.oauth?.xaa ? ' Authenticating via your identity provider' : ' A browser window will open for authentication';
     return <Box flexDirection="column" gap={1} padding={1}>
-        <Text color="claude">Authenticating with {server.name}…</Text>
+      <Text color="claude">Authenticating with {server.name}...</Text>
         <Box>
           <Spinner />
           <Text>{authCopy}</Text>
@@ -384,7 +384,7 @@ export function MCPRemoteServerMenu({
   }
   if (isClaudeAIAuthenticating) {
     return <Box flexDirection="column" gap={1} padding={1}>
-        <Text color="claude">Authenticating with {server.name}…</Text>
+        <Text color="claude">Authenticating with {server.name}...</Text>
         <Box>
           <Spinner />
           <Text> A browser window will open for authentication</Text>
@@ -458,8 +458,7 @@ export function MCPRemoteServerMenu({
   if (isReconnecting) {
     return <Box flexDirection="column" gap={1} padding={1}>
         <Text color="text">
-          Connecting to <Text bold>{server.name}</Text>…
-        </Text>
+          Connecting to <Text bold>{server.name}</Text>�?        </Text>
         <Box>
           <Spinner />
           <Text> Establishing connection to MCP server</Text>
@@ -543,7 +542,7 @@ export function MCPRemoteServerMenu({
             <Text bold>Status: </Text>
             {server.client.type === 'disabled' ? <Text>{color('inactive', theme)(figures.radioOff)} disabled</Text> : server.client.type === 'connected' ? <Text>{color('success', theme)(figures.tick)} connected</Text> : server.client.type === 'pending' ? <>
                 <Text dimColor>{figures.radioOff}</Text>
-                <Text> connecting…</Text>
+                <Text> connecting...</Text>
               </> : server.client.type === 'needs-auth' ? <Text>
                 {color('warning', theme)(figures.triangleUpOutline)} needs
                 authentication
