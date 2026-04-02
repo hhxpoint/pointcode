@@ -164,7 +164,7 @@ export function ConfirmStep(t0) {
       t25 = $[41];
     }
     if ($[42] !== t25) {
-      t8 = <Text>{t24}:{" "}{t25}</Text>;
+      t8 = <Text>{t24}:{" "}{t25.replace('.claude', '.point')}</Text>;
       $[42] = t25;
       $[43] = t8;
     } else {
@@ -216,7 +216,7 @@ export function ConfirmStep(t0) {
     }
     t11 = memoryDisplayElement;
     if ($[54] === Symbol.for("react.memo_cache_sentinel")) {
-      t12 = <Box marginTop={1}><Text><Text bold={true}>Description</Text> (tells Claude when to use this agent):</Text></Box>;
+      t12 = <Box marginTop={1}><Text><Text bold={true}>Description</Text> (tells Point when to use this agent):</Text></Box>;
       $[54] = t12;
     } else {
       t12 = $[54];

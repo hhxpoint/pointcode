@@ -20,7 +20,35 @@ import { getDefaultMainLoopModelSetting, isOpus1mMergeEnabled, renderDefaultMode
 import { getAPIProvider } from '../../utils/model/providers.js';
 import { isModelAllowed } from '../../utils/model/modelAllowlist.js';
 import { validateModel } from '../../utils/model/validateModel.js';
+import { saveApiKey } from '../../utils/auth.js';
 import { applyProviderProfileToProcessEnv, saveOpenAIProviderProfile } from '../../utils/providerSetup.js';
+async function saveModelApiKey(value: string, onDone: (result?: string, options?: {
+  display?: CommandResultDisplay;
+}) => void): Promise<void> {
+  if (getAPIProvider() === 'openai') {
+    const profile = saveOpenAIProviderProfile({
+      OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
+      OPENAI_MODEL: process.env.OPENAI_MODEL,
+      OPENAI_API_KEY: value
+    });
+    applyProviderProfileToProcessEnv(profile);
+    onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
+      display: 'system'
+    });
+    return;
+  }
+  try {
+    await saveApiKey(value);
+    process.env.ANTHROPIC_API_KEY = value;
+    onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
+      display: 'system'
+    });
+  } catch (error) {
+    onDone(`Failed to save API key: ${(error as Error).message}`, {
+      display: 'system'
+    });
+  }
+}
 function EnterApiKeyAndSave({
   onDone
 }: {
@@ -39,22 +67,7 @@ function EnterApiKeyAndSave({
       setErrorText('API key cannot be empty.');
       return;
     }
-    if (getAPIProvider() !== 'openai') {
-      onDone('Current provider is not OpenAI-compatible. Run /provider set <provider_id> first, then /model key <api_key>.', {
-        display: 'system'
-      });
-      return;
-    }
-
-    const profile = saveOpenAIProviderProfile({
-      OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
-      OPENAI_MODEL: process.env.OPENAI_MODEL,
-      OPENAI_API_KEY: value
-    });
-    applyProviderProfileToProcessEnv(profile);
-    onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
-      display: 'system'
-    });
+    void saveModelApiKey(value, onDone);
   }
 
   return <Box flexDirection="column">
@@ -394,7 +407,7 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
   if (!args && missingOpenAIKeyTip) {
     return <EnterApiKeyAndSave onDone={onDone} />;
   }
-  if (missingOpenAIKeyTip && args.toLowerCase().startsWith('sk-')) {
+  if (args.toLowerCase().startsWith('sk-')) {
     args = `key ${args}`;
   }
   if (args.toLowerCase() === 'key') {
@@ -408,21 +421,7 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
       });
       return;
     }
-    if (getAPIProvider() !== 'openai') {
-      onDone('Current provider is not OpenAI-compatible. Run /provider set <provider_id> first, then /model key <api_key>.', {
-        display: 'system'
-      });
-      return;
-    }
-    const profile = saveOpenAIProviderProfile({
-      OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
-      OPENAI_MODEL: process.env.OPENAI_MODEL,
-      OPENAI_API_KEY: apiKey
-    });
-    applyProviderProfileToProcessEnv(profile);
-    onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
-      display: 'system'
-    });
+    await saveModelApiKey(apiKey, onDone);
     return;
   }
   if (COMMON_INFO_ARGS.includes(args)) {

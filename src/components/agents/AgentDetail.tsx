@@ -35,6 +35,7 @@ export function AgentDetail(t0) {
     t1 = $[1];
   }
   const filePath = t1;
+  const displayFilePath = filePath.replace('.claude', '.point');
   let t2;
   if ($[2] !== agent.agentType) {
     t2 = getAgentColor(agent.agentType);
@@ -83,16 +84,16 @@ export function AgentDetail(t0) {
   const t7 = 0;
   const t8 = true;
   let t9;
-  if ($[7] !== filePath) {
-    t9 = <Text dimColor={true}>{filePath}</Text>;
-    $[7] = filePath;
+  if ($[7] !== displayFilePath) {
+    t9 = <Text dimColor={true}>{displayFilePath}</Text>;
+    $[7] = displayFilePath;
     $[8] = t9;
   } else {
     t9 = $[8];
   }
   let t10;
   if ($[9] === Symbol.for("react.memo_cache_sentinel")) {
-    t10 = <Text><Text bold={true}>Description</Text> (tells Claude when to use this agent):</Text>;
+    t10 = <Text><Text bold={true}>Description</Text> (tells Point when to use this agent):</Text>;
     $[9] = t10;
   } else {
     t10 = $[9];

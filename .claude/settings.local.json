@@ -19,7 +19,8 @@
       "Bash(npm config:*)",
       "Bash(git add:*)",
       "Bash(git tag:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npm run:*)"
     ]
   }
 }
