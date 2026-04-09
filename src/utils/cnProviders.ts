@@ -39,6 +39,29 @@ export interface CNProviderPreset {
 }
 
 export const CN_PROVIDERS: Record<string, CNProviderPreset> = {
+  openrouter: {
+    id: 'openrouter',
+    name: 'OpenRouter',
+    nameEn: 'OpenRouter',
+    baseUrl: 'https://openrouter.ai/api/v1',
+    requiresApiKey: true,
+    defaultModel: 'google/gemma-4-31b-it:free',
+    docUrl: 'https://openrouter.ai/models/google/gemma-4-31b-it:free',
+    models: [
+      {
+        id: 'google/gemma-4-31b-it:free',
+        name: 'Gemma 4 31B (Free)',
+        contextWindow: 131072,
+        reasoning: true,
+      },
+      {
+        id: 'google/gemma-3-27b-it:free',
+        name: 'Gemma 3 27B (Free)',
+        contextWindow: 131072,
+        reasoning: true,
+      },
+    ],
+  },
   dashscope: {
     id: 'dashscope',
     name: '通义千问 (Qwen)',

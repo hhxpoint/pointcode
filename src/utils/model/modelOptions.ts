@@ -537,6 +537,16 @@ export function getModelOptions(fastMode = false): ModelOption[] {
       description: 'Xiaomi MiMo fast model',
     },
     {
+      value: 'google/gemma-4-31b-it:free',
+      label: 'Gemma 4 31B (Free)',
+      description: 'OpenRouter · Google Gemma reasoning model',
+    },
+    {
+      value: 'google/gemma-3-27b-it:free',
+      label: 'Gemma 3 27B (Free)',
+      description: 'OpenRouter · Google Gemma fast free model',
+    },
+    {
       value: 'opus',
       label: 'Opus',
       description: 'Anthropic Opus for complex reasoning',

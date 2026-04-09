@@ -120,6 +120,7 @@ bun -v
 | **智谱 GLM** | `glm-5-turbo` | 快速版本 | ✅ |
 | **小米 MiMo** | `mimo-v2-pro` | 专业版 | ✅ |
 | **小米 MiMo** | `mimo-v2-flash` | 快速版 | ✅ |
+| **OpenRouter** | `google/gemma-4-31b-it:free` | Gemma 4 31B 免费模型 | ✅ |
 
 ### 本地模型 (Ollama)
 
@@ -132,6 +133,24 @@ CLAUDE_CODE_USE_OPENAI=1 OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_MODEL=
 - `qwen2.5:7b` - 代码能力强
 - `llama3.2:3b` - 轻量快速
 - `codellama:7b` - 专用代码模型
+
+### OpenRouter (Gemma)
+
+```bash
+# 方式 1：直接环境变量启动
+CLAUDE_CODE_USE_OPENAI=1 OPENAI_BASE_URL=https://openrouter.ai/api/v1 OPENAI_MODEL=google/gemma-4-31b-it:free OPENAI_API_KEY=sk-or-... pointcode
+
+# 方式 2：使用内置脚本
+OPENAI_API_KEY=sk-or-... bun run dev:openrouter
+```
+
+也可以在应用内使用 provider 命令：
+
+```bash
+/provider key openrouter <your-openrouter-key>
+/provider set openrouter
+/model
+```
 
 ---
 
