@@ -529,6 +529,16 @@ export function getModelOptions(fastMode = false): ModelOption[] {
       description: 'Zhipu GLM fast model',
     },
     {
+      value: 'mimo-v2.5-pro',
+      label: 'MiMo V2.5 Pro',
+      description: 'Xiaomi MiMo · latest flagship model',
+    },
+    {
+      value: 'mimo-v2.5',
+      label: 'MiMo V2.5',
+      description: 'Xiaomi MiMo · latest balanced model',
+    },
+    {
       value: 'mimo-v2-pro',
       label: 'MiMo V2 Pro',
       description: 'Xiaomi MiMo high capability model',
