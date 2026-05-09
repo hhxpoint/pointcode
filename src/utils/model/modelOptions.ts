@@ -490,11 +490,13 @@ function getKnownModelOption(model: string): ModelOption | null {
 }
 
 export function getModelOptions(fastMode = false): ModelOption[] {
+  const currentOpenAIModel = process.env.OPENAI_MODEL ?? 'qwen3.5-plus'
+
   const pointCodeOptions: ModelOption[] = [
     {
       value: null,
       label: 'Default (recommended)',
-      description: 'Use the default model (currently qwen3.5-plus)',
+      description: `Use the default model (currently ${currentOpenAIModel})`,
     },
     {
       value: 'qwen3.5-plus',
@@ -553,25 +555,44 @@ export function getModelOptions(fastMode = false): ModelOption[] {
     },
   ]
 
-  return filterModelOptionsByAllowlist(pointCodeOptions)
-
   if (getAPIProvider() === 'openai') {
     const presetOptions = getOpenAIPresetOptions()
     const remoteOptions = getCachedOpenAIModelOptions(presetOptions)
 
+    // Preserve PointCode curated options while showing provider presets first.
+    // Deduplicate by model value so options remain stable across providers.
+    const mergedOptions: ModelOption[] = []
+    const seen = new Set<ModelSetting>()
+    for (const option of [...presetOptions, ...pointCodeOptions, ...remoteOptions]) {
+      if (seen.has(option.value)) {
+        continue
+      }
+      seen.add(option.value)
+      mergedOptions.push(option)
+    }
+
     return [
-      ...presetOptions,
-      ...remoteOptions,
+      ...mergedOptions,
       {
         value: '__custom__',
         label: 'Custom model',
         description: 'Manually enter a model name',
       },
+      {
+        value: '__custom_endpoint__',
+        label: 'Custom Endpoint',
+        description: 'Configure your own API URL, key, and model',
+      },
     ]
-
   }
 
   const options = getModelOptionsBase(fastMode)
+
+  options.push({
+    value: '__custom_endpoint__',
+    label: 'Custom Endpoint',
+    description: 'Configure your own API URL, key, and model',
+  })
 
   // Add the custom model from the ANTHROPIC_CUSTOM_MODEL_OPTION env var
   const envCustomModel = process.env.ANTHROPIC_CUSTOM_MODEL_OPTION

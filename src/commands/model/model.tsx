@@ -16,13 +16,16 @@ import { isBilledAsExtraUsage } from '../../utils/extraUsage.js';
 import { clearFastModeCooldown, isFastModeAvailable, isFastModeEnabled, isFastModeSupportedByModel } from '../../utils/fastMode.js';
 import { MODEL_ALIASES } from '../../utils/model/aliases.js';
 import { checkOpus1mAccess, checkSonnet1mAccess } from '../../utils/model/check1mAccess.js';
-import { getDefaultMainLoopModelSetting, isOpus1mMergeEnabled, renderDefaultModelSetting, switchOpenAIModel } from '../../utils/model/model.js';
+import { getDefaultMainLoopModelSetting, isOpus1mMergeEnabled, parseUserSpecifiedModel, renderDefaultModelSetting, switchOpenAIModel } from '../../utils/model/model.js';
 import { getAPIProvider } from '../../utils/model/providers.js';
 import { isModelAllowed } from '../../utils/model/modelAllowlist.js';
 import { validateModel } from '../../utils/model/validateModel.js';
 import { saveApiKey } from '../../utils/auth.js';
 import { applyProviderProfileToProcessEnv, saveOpenAIProviderProfile } from '../../utils/providerSetup.js';
-import { getCNProviderList } from '../../utils/cnProviders.js';
+import { getCNProviderList } from '../../utils/cnProviders.js'
+import { EnterCustomEndpoint } from '../../components/EnterCustomEndpoint.js';
+
+const API_KEY_SAVED_MESSAGE = 'API key saved. You can now run /model to choose a model and start using PointCode.';
 
 function clearThirdPartyProviderFlags(): void {
   delete process.env.CLAUDE_CODE_USE_OPENAI;
@@ -38,6 +41,75 @@ function isAnthropicFamilyModel(model: string | null | undefined): boolean {
   }
   const normalized = model.toLowerCase();
   return normalized.includes('opus') || normalized.includes('sonnet') || normalized.includes('haiku') || normalized.includes('claude');
+}
+
+function buildCredentialMismatchHint(model: string, errorText?: string): string {
+  const lower = (errorText ?? '').toLowerCase();
+  const likelyAuthError = lower.includes('auth') || lower.includes('invalid api key') || lower.includes('api key') || lower.includes('401') || lower.includes('403');
+  if (!likelyAuthError) {
+    return '';
+  }
+
+  if (isAnthropicFamilyModel(model)) {
+    return `Model '${model}' belongs to Claude family. Please use an Anthropic/Claude API key, or switch to qwen/deepseek/glm/mimo if you want to use OpenAI-compatible keys.`;
+  }
+
+  return `Model '${model}' uses an OpenAI-compatible provider. Please use the matching provider key (for example Qwen, DeepSeek, GLM, or MiMo key).`;
+}
+
+function isNonBlockingProviderValidationError(errorText?: string): boolean {
+  const lower = (errorText ?? '').toLowerCase();
+  return lower.includes('openai api error 429') || lower.includes('"code":429') || lower.includes('temporarily rate-limited upstream') || lower.includes('user location is not supported for the api use');
+}
+
+function normalizeBaseUrl(baseUrl?: string): string | undefined {
+  return baseUrl?.replace(/\/+$/, '');
+}
+
+function resolveDefaultOpenAIModel(): string {
+  if (process.env.OPENAI_MODEL) {
+    return process.env.OPENAI_MODEL;
+  }
+  const currentBaseUrl = normalizeBaseUrl(process.env.OPENAI_BASE_URL);
+  if (!currentBaseUrl) {
+    return 'qwen3.5-plus';
+  }
+  const provider = getCNProviderList().find(item => normalizeBaseUrl(item.baseUrl) === currentBaseUrl);
+  return provider?.defaultModel ?? 'qwen3.5-plus';
+}
+
+async function validateModelAccessAfterSave(modelValue: string | null | undefined): Promise<{
+  ok: boolean;
+  message?: string;
+}> {
+  if (!modelValue) {
+    return {
+      ok: true
+    };
+  }
+
+  const modelToValidate = parseUserSpecifiedModel(modelValue);
+  const {
+    valid,
+    error
+  } = await validateModel(modelToValidate);
+  if (valid) {
+    return {
+      ok: true
+    };
+  }
+
+  if (isNonBlockingProviderValidationError(error)) {
+    return {
+      ok: true
+    };
+  }
+
+  const hint = buildCredentialMismatchHint(modelToValidate, error);
+  return {
+    ok: false,
+    message: `${API_KEY_SAVED_MESSAGE}\nValidation failed for '${modelToValidate}': ${error}${hint ? `\n${hint}` : ''}`
+  };
 }
 
 function resolveBaseUrlForModel(model: string | null | undefined): string | undefined {
@@ -59,14 +131,15 @@ async function saveModelApiKey(value: string, onDone: (result?: string, options?
       await saveApiKey(value);
       process.env.ANTHROPIC_API_KEY = value;
       delete process.env.OPENAI_API_KEY;
-      onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
+      const validation = await validateModelAccessAfterSave(modelValue);
+      onDone(validation.ok ? API_KEY_SAVED_MESSAGE : validation.message, {
         display: 'system'
       });
       return;
     }
 
-    const openAIModel = modelValue ?? process.env.OPENAI_MODEL ?? 'qwen3.5-plus';
-    const openAIBaseUrl = resolveBaseUrlForModel(openAIModel) ?? 'https://dashscope.aliyuncs.com/compatible-mode/v1';
+    const openAIModel = modelValue ?? resolveDefaultOpenAIModel();
+    const openAIBaseUrl = resolveBaseUrlForModel(openAIModel) ?? process.env.OPENAI_BASE_URL ?? 'https://dashscope.aliyuncs.com/compatible-mode/v1';
     const profile = saveOpenAIProviderProfile({
       OPENAI_BASE_URL: openAIBaseUrl,
       OPENAI_MODEL: openAIModel,
@@ -76,7 +149,8 @@ async function saveModelApiKey(value: string, onDone: (result?: string, options?
     process.env.CLAUDE_CODE_USE_OPENAI = '1';
     delete process.env.ANTHROPIC_API_KEY;
     await saveApiKey(value);
-    onDone('API key saved. You can now run /model to choose a model and start using PointCode.', {
+    const validation = await validateModelAccessAfterSave(modelValue);
+    onDone(validation.ok ? API_KEY_SAVED_MESSAGE : validation.message, {
       display: 'system'
     });
   } catch (error) {
@@ -146,6 +220,7 @@ function ModelPickerWrapper(t0: {
     model: string | null;
     effort: EffortLevel | undefined;
   } | null>(null);
+  const [showCustomEndpoint, setShowCustomEndpoint] = useState(false);
 
   function applyModelAndClose(model: string | null, effort: EffortLevel | undefined, includeKeySavedPrefix = false): void {
     setAppState(prev => ({
@@ -205,6 +280,11 @@ function ModelPickerWrapper(t0: {
       return;
     }
 
+    if (model === '__custom_endpoint__') {
+      setShowCustomEndpoint(true);
+      return;
+    }
+
     let selectedModel = model;
     if (selectedModel !== null && !isAnthropicFamilyModel(selectedModel)) {
       selectedModel = switchOpenAIModel(selectedModel);
@@ -223,9 +303,22 @@ function ModelPickerWrapper(t0: {
 
   const showFastModeNotice = isFastModeEnabled() && isFastMode && isFastModeSupportedByModel(mainLoopModel) && isFastModeAvailable();
 
+  if (showCustomEndpoint) {
+    return <EnterCustomEndpoint onDone={(result, options) => {
+      if (result) {
+        setAppState(prev => ({
+          ...prev,
+          mainLoopModel: null,
+          mainLoopModelForSession: null,
+        }));
+      }
+      onDone(result, options);
+    }} />;
+  }
+
   if (pendingSelection) {
     return <EnterApiKeyAndSave modelValue={pendingSelection.model} onDone={(result, options) => {
-      if (!result || !result.startsWith('API key saved')) {
+      if (!result || !result.startsWith(API_KEY_SAVED_MESSAGE)) {
         onDone(result, options);
         return;
       }
@@ -262,6 +355,21 @@ function SetModelAndClose({
   const isFastMode = useAppState((s: AppState) => s.fastMode);
   const setAppState = useSetAppState();
   const model = args === 'default' ? null : args;
+  const [showCustomEndpoint, setShowCustomEndpoint] = useState(false);
+
+  if (showCustomEndpoint) {
+    return <EnterCustomEndpoint onDone={(result, options) => {
+      if (result) {
+        setAppState(prev => ({
+          ...prev,
+          mainLoopModel: null,
+          mainLoopModelForSession: null,
+        }));
+      }
+      onDone(result, options);
+    }} />;
+  }
+
   React.useEffect(() => {
     async function handleModelChange(): Promise<void> {
       if (model && !isModelAllowed(model)) {
@@ -303,6 +411,11 @@ function SetModelAndClose({
         onDone("Custom model placeholder selected. Run /model <model-name> (for example: /model qwen3.5-plus).", {
           display: 'system'
         });
+        return;
+      }
+
+      if (model === '__custom_endpoint__') {
+        setShowCustomEndpoint(true);
         return;
       }
 
@@ -453,6 +566,9 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
     await saveModelApiKey(apiKey, onDone);
     return;
   }
+  if (args.toLowerCase() === 'endpoint' || args.toLowerCase() === 'custom') {
+    return <EnterCustomEndpoint onDone={onDone} />;
+  }
   if (COMMON_INFO_ARGS.includes(args)) {
     logEvent('tengu_model_command_inline_help', {
       args: args as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS
@@ -460,7 +576,7 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
     return <ShowModelAndClose onDone={onDone} />;
   }
   if (COMMON_HELP_ARGS.includes(args)) {
-    onDone('Run /model to open the model selection menu, /model [modelName] to set the model, or /model key <api_key> to save your API key.', {
+    onDone('Run /model to open the model selection menu, /model [modelName] to set the model, /model key <api_key> to save your API key, or /model endpoint to configure a custom API endpoint.', {
       display: 'system'
     });
     return;
